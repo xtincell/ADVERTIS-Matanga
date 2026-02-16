@@ -6,6 +6,8 @@ import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
 const config = {
+  // Use "standalone" for Docker builds only (set via NEXT_OUTPUT env var)
+  ...(process.env.NEXT_OUTPUT === "standalone" ? { output: "standalone" } : {}),
   async headers() {
     return [
       {
