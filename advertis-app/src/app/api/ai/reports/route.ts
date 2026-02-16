@@ -1,6 +1,6 @@
 // ADVERTIS Report Generation API Route
 // POST /api/ai/reports
-// Generates all 6 reports (Phase 3 — Implementation).
+// Generates all 8-pillar reports (Phase 3 — Implementation).
 // Long-running process: generates section-by-section and saves progress incrementally.
 
 import { type NextRequest, NextResponse } from "next/server";
@@ -16,6 +16,8 @@ import {
   PILLAR_CONFIG,
 } from "~/lib/constants";
 import type { ReportType, PillarType } from "~/lib/constants";
+import { calculateCoherenceScore } from "~/server/services/coherence-calculator";
+import { checkRateLimit, RATE_LIMITS } from "~/lib/rate-limit";
 
 export const maxDuration = 300; // 5 minutes max (Vercel)
 
@@ -26,6 +28,27 @@ export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // ---------------------------------------------------------------------------
+  // 1b. Rate limit check
+  // ---------------------------------------------------------------------------
+  const rateLimit = checkRateLimit(
+    `ai-reports:${session.user.id}`,
+    RATE_LIMITS.reportGeneration,
+  );
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { error: "Trop de requêtes de génération. Veuillez patienter." },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(
+            Math.ceil((rateLimit.resetAt - Date.now()) / 1000),
+          ),
+        },
+      },
+    );
   }
 
   // ---------------------------------------------------------------------------
@@ -80,11 +103,15 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Verify strategy is in the right phase
-  if (strategy.phase !== "implementation" && strategy.phase !== "cockpit" && strategy.phase !== "complete") {
+  // Verify strategy has completed audit phase (R+T done) before generating reports
+  const auditComplete = strategy.pillars
+    .filter((p) => ["R", "T"].includes(p.type))
+    .every((p) => p.status === "complete");
+
+  if (!auditComplete) {
     return NextResponse.json(
       {
-        error: `La stratégie doit être en phase "implementation" pour générer les rapports. Phase actuelle : "${strategy.phase}"`,
+        error: `Les piliers R (Risk) et T (Track) doivent être complétés avant de générer les rapports.`,
       },
       { status: 400 },
     );
@@ -137,12 +164,12 @@ export async function POST(req: NextRequest) {
       const rt = typesToGenerate[i]!;
       const config = REPORT_CONFIG[rt];
 
-      // Create or update document record
+      // Create or update document record — use a single variable for the doc ID
       const existingDoc = await db.document.findUnique({
         where: { strategyId_type: { strategyId, type: rt } },
       });
 
-      const docId = existingDoc?.id;
+      let currentDocId: string;
 
       if (existingDoc) {
         await db.document.update({
@@ -152,6 +179,7 @@ export async function POST(req: NextRequest) {
             errorMessage: null,
           },
         });
+        currentDocId = existingDoc.id;
       } else {
         const newDoc = await db.document.create({
           data: {
@@ -161,41 +189,30 @@ export async function POST(req: NextRequest) {
             strategyId,
           },
         });
-        // Use newly created ID
-        (existingDoc as unknown) = newDoc;
+        currentDocId = newDoc.id;
       }
-
-      const currentDocId = docId ?? (existingDoc as { id: string })?.id;
 
       // Generate report section by section
       const result = await generateReport(
         rt,
         context,
-        async (progress) => {
-          // Save progress incrementally after each section
-          if (currentDocId) {
-            // Get current sections from the result being built
-            // We can't easily access partial results here, so we skip incremental saves
-            // The full result will be saved after completion
-          }
+        async (_progress) => {
+          // Progress callback — incremental saves could be added here
         },
       );
 
       // Save completed report
-      const finalDocId = currentDocId ?? docId;
-      if (finalDocId) {
-        await db.document.update({
-          where: { id: finalDocId },
-          data: {
-            status: result.status,
-            sections: JSON.parse(JSON.stringify(result.sections)),
-            content: JSON.parse(JSON.stringify(result)),
-            pageCount: result.pageCount,
-            generatedAt: new Date(),
-            errorMessage: result.errorMessage ?? null,
-          },
-        });
-      }
+      await db.document.update({
+        where: { id: currentDocId },
+        data: {
+          status: result.status,
+          sections: JSON.parse(JSON.stringify(result.sections)),
+          content: JSON.parse(JSON.stringify(result)),
+          pageCount: result.pageCount,
+          generatedAt: new Date(),
+          errorMessage: result.errorMessage ?? null,
+        },
+      });
 
       results.push({
         type: result.type,
@@ -227,31 +244,41 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    // Recalculate coherence score after generation
+    const updatedPillars = await db.pillar.findMany({
+      where: { strategyId },
+      select: { type: true, status: true, content: true },
+    });
+    const coherenceScore = calculateCoherenceScore(
+      updatedPillars,
+      strategy.interviewData as Record<string, unknown> | undefined,
+    );
+
     // Advance to cockpit phase
     await db.strategy.update({
       where: { id: strategyId },
       data: {
         phase: "cockpit",
-        status: "generating",
+        status: "complete",
+        coherenceScore,
       },
     });
 
     return NextResponse.json({
       success: true,
       reports: results,
+      coherenceScore,
     });
   } catch (error) {
-    console.error("[Report Generation] Error:", error);
-
     const errorMessage =
       error instanceof Error
         ? error.message
         : "Unknown error during report generation";
 
-    // Mark strategy back to implementation phase on error
+    // Reset strategy status to draft on error (not stuck in "generating")
     await db.strategy.update({
       where: { id: strategyId },
-      data: { status: "generating" },
+      data: { status: "draft" },
     });
 
     return NextResponse.json(

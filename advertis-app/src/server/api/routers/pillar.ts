@@ -63,7 +63,7 @@ export const pillarRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.string(),
-        content: z.any().optional(),
+        content: z.unknown().optional(),
         summary: z.string().optional(),
         status: z
           .enum(["pending", "generating", "complete", "error"])
