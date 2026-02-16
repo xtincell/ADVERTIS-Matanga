@@ -6,6 +6,8 @@ import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
 const config = {
+  // Required for Docker standalone builds
+  output: "standalone",
   async headers() {
     return [
       {
