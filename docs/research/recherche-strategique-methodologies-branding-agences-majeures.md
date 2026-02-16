@@ -235,7 +235,7 @@ Richard Rumelt définit le "Kernel de Bonne Stratégie" dans son livre "Good Str
 ┌─────────────────────────────────────────────────────────────┐
 │                   LAYER 1: VARIABLES                         │
 │    (40+ Variables de Données Brutes Collectées)             │
-│    Réparties sur les 6 Piliers A-D-V-E-R-T                  │
+│    Réparties sur les 8 Piliers A-D-V-E-R-T-I-S              │
 └─────────────────────────────────────────────────────────────┘
 ```
 

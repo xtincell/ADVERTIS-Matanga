@@ -15,7 +15,7 @@ ADVERT is a modular dual-view platform that systematizes brand cult creation, en
 
 The platform addresses a critical systemic problem: African marketing and brand directors face existential pressure due to fragmented strategies, misaligned budgets, unrealistic projections, and inability to track campaigns or retain talent. This creates a vicious cycle where small budgets cultivate mediocrity, preventing agencies from building reputation and capturing larger accounts, while even giants like Havas Group struggle with insufficient African market data.
 
-ADVERT breaks this cycle through two integrated views: (1) Strategic View—the ADVERT nucleus generating comprehensive reports and recommendations based on 6 pillars (Authenticité, Distinction, Valeur, Engagement, Risk, Track) with 40+ variables and calculatory modules, and (2) Operational View—an enterprise OS (modeled on Odoo/Zoho) handling invoicing, project tracking, and talent management, all feeding from and into the strategic core.
+ADVERT breaks this cycle through two integrated views: (1) Strategic View—the ADVERT nucleus generating comprehensive reports and recommendations based on 8 pillars (Authenticité, Distinction, Valeur, Engagement, Risk, Track, Implementation, Strategy) with 40+ variables and calculatory modules, and (2) Operational View—an enterprise OS (modeled on Odoo/Zoho) handling invoicing, project tracking, and talent management, all feeding from and into the strategic core.
 
 The philosophy: superfans can carry a project and allow its promoter to live from their passion. The competitive moat: a psychology-grounded framework (Schwartz Values, Ikigai, Hero's Journey, AARRR) delivered through multi-agent AI architecture, combined with rare StratCreaOf positioning (strategic + creative bridge), data collection via creative concierge services, and deep African market expertise. The killer value proposition: see where money goes, how to multiply it, with clear predictability over weeks and months—planning that matches budget, and monthly reports proving traction.
 
@@ -89,9 +89,9 @@ ADVERT has evolved from a strategic framework into a complete business platform 
 
 **Architecture:**
 
-1. **Strategic Core—ADVERT Nucleus** (Authenticité, Distinction, Valeur, Engagement, Risk, Track):
+1. **Strategic Core—ADVERT Nucleus** (Authenticité, Distinction, Valeur, Engagement, Risk, Track, Implementation, Strategy):
    - Generates comprehensive reports and strategic recommendations
-   - Based on 6 pillars: Authenticité, Distinction, Valeur, Engagement, Risk, Track
+   - Based on 8 pillars: Authenticité, Distinction, Valeur, Engagement, Risk, Track
    - 40+ variables with intelligent calculatory modules (e.g., CODB calculator for operational costs)
    - Multi-agent AI architecture coordinating specialized agents for each pillar
    - Psychology-grounded frameworks: Schwartz Values Wheel, Ikigai, Hero's Journey, AARRR metrics
@@ -166,7 +166,7 @@ ADVERT v2.0 solves this by introducing:
 
 | Aspect | Traditional Agencies | ADVERT v1 | ADVERT v2.0 |
 |--------|---------------------|-----------|------------|
-| Strategy Delivery | PowerPoint deck | 6-pillar PDF + dashboard | 6-pillar nucleus + roadmap + live cockpit |
+| Strategy Delivery | PowerPoint deck | 8-pillar PDF + dashboard | 8-pillar nucleus + roadmap + live cockpit |
 | Implementation | "You figure it out" | Manual execution tracking | Pilier I roadmap with dependencies |
 | Operational Visibility | Annual reviews | Basic reporting | Pilier S real-time monitoring |
 | Client Confidence | Low (static doc) | Medium (structured framework) | High (strategy → execution → results proof) |
@@ -185,7 +185,7 @@ ADVERT v2.0 solves this by introducing:
 ADVERT's competitive advantage is a multi-layered fortress that compounds:
 
 **Proprietary Methodology:**
-- 6-pillar ADVERT framework with 40+ variables and meta-variable generation system
+- 8-pillar ADVERT framework with 40+ variables and meta-variable generation system
 - Psychology-grounded (Schwartz Values, Ikigai, Hero's Journey, AARRR) vs. "trust my 20 years experience"
 - Reverse-engineers brand cult mechanics from Apple, Nike, Patagonia, and Catholic Church
 - Systematizes what only global giants (Havas, Publicis, Omnicom) can do with their hidden methods
@@ -419,7 +419,7 @@ ADVERT addresses both immediate tactical needs and long-term strategic transform
 **Immediate (Q1 2026):**
 - ✅ SPAWT case study: Complete ADVERT file for internal consulting client (already in progress)
 - ✅ ADVERT self-marketing: "We use ADVERT to market ADVERT" (meta case study demonstrating transparency)
-- ✅ Brainstorming documentation: 100 ideas, 6 pillars fully mapped, architecture designed
+- ✅ Brainstorming documentation: 100 ideas, 8 pillars fully mapped, architecture designed
 
 **Near-term (Q2 2026):**
 - 🎯 Beta program: 5-10 African brands across sectors
@@ -465,7 +465,7 @@ The creative concierge service is ADVERT's strategic Trojan horse—appearing as
 - **Case Study Rights**: With brand permission, talents can showcase projects as case studies
 
 **Upskilling & Career Growth:**
-- **ADVERT Methodology Training**: Access to courses on the 6-pillar framework, cult marketing, superfan creation
+- **ADVERT Methodology Training**: Access to courses on the 8-pillar framework, cult marketing, superfan creation
 - **Certification Program**: Become "ADVERT-Certified Creative Strategist" (credential for career advancement)
 - **Mentorship**: Connect with senior creatives who've successfully navigated African market challenges
 - **Community**: Network with other talents; collaborative opportunities; shared learning
@@ -595,7 +595,7 @@ To serve diverse customer segments from lean startups to established agencies, A
 - Affordable for bootstrapped founders; ROI positive if converts 10+ superfans
 
 **Upgrade Path:**
-- Graduate to Professional Edition when raise Series A, hit $1M revenue, or need full 6-pillar sophistication
+- Graduate to Professional Edition when raise Series A, hit $1M revenue, or need full 8-pillar sophistication
 
 ### Professional Edition (For Agencies & Established Brands)
 
@@ -606,7 +606,7 @@ To serve diverse customer segments from lean startups to established agencies, A
 - Need: Comprehensive strategy; compete with McCann/Havas; long-term transformation
 
 **Full Framework:**
-- **6 Pillars**: Authenticité, Distinction, Valeur, Engagement, Risk, Track
+- **8 Pillars**: Authenticité, Distinction, Valeur, Engagement, Risk, Track
 - **40+ Variables**: Comprehensive coverage; meta-variable generation
 - **Calculatory Modules**: CODB calculator, unit economics, pricing optimization, etc.
 - **Annual Strategy + Quarterly Updates**: Long-term planning with adaptive refinement
@@ -705,7 +705,7 @@ ADVERT operates in a challenging environment: complex product, resource-constrai
 
 ### 1. Complexity Management
 
-**Risk**: Users overwhelmed by 6 pillars, 40+ variables; churn within 2 months.
+**Risk**: Users overwhelmed by 8 pillars, 40+ variables; churn within 2 months.
 
 **Mitigation:**
 - Progressive disclosure: Launch Starter Edition (3 pillars, 15 variables) as default entry
@@ -828,7 +828,7 @@ ADVERT is built from fundamental truths about human psychology, African market r
 **Truth 7: Complexity is a UX Challenge, Not a Framework Problem**
 - Sophisticated frameworks can have intuitive interfaces (progressive disclosure, collapsible sections, guided workflows)
 - The solution to complexity is better UX design, not feature reduction
-- **Implication:** Keep all 6 pillars and 40+ variables; solve adoption through interface design
+- **Implication:** Keep all 8 pillars and 40+ variables; solve adoption through interface design
 
 **Truth 8: Marketing Directors Need Proof, Not Promises**
 - Existential pressure to justify budgets and deliver ROI
@@ -837,7 +837,7 @@ ADVERT is built from fundamental truths about human psychology, African market r
 
 ### The Sophistication Advantage
 
-**Why 6 Pillars and 40+ Variables is Essential:**
+**Why 8 Pillars and 40+ Variables is Essential:**
 
 **1. Competitive Parity with Giants**
 - McCann/Havas have internal frameworks with comparable complexity
@@ -873,7 +873,7 @@ ADVERT is built from fundamental truths about human psychology, African market r
 **The Right Approach: Progressive Disclosure & Intelligent Defaults**
 
 **1. Collapsible Sections**
-- Default view: Show 6 pillar summaries (collapsed)
+- Default view: Show 8 pillar summaries (collapsed)
 - Expand on demand: Click pillar → see all variables for that pillar
 - Power user mode: Toggle to see all 40+ variables simultaneously
 - Result: Casual users see simplicity; expert users access depth
@@ -916,13 +916,13 @@ ADVERT is built from fundamental truths about human psychology, African market r
 - **Limitation:** Generates strategy but lacks depth for competitive advantage
 - **Upgrade Path:** Graduate to Professional when ready for full power
 
-**Professional Edition: Full Sophistication (6 Pillars, 40+ Variables)**
+**Professional Edition: Full Sophistication (8 Pillars, 40+ Variables)**
 - **Purpose:** Core ADVERT product for expert users
 - **Positioning:** "Compete with McCann/Havas using their level of strategic rigor"
 - **Target:** Agencies, established brands, ambitious marketing directors
 - **Value Prop:** Comprehensive, AI-powered, psychology-grounded, data-rich
 
-**Enterprise Edition: Custom Sophistication (6 Pillars + Custom Variables)**
+**Enterprise Edition: Custom Sophistication (8 Pillars + Custom Variables)**
 - **Purpose:** Large agencies with proprietary methodologies
 - **Positioning:** "White-label ADVERT with your custom frameworks integrated"
 - **Customization:** Add industry-specific variables, custom calculators, bespoke modules
@@ -1568,7 +1568,7 @@ Raise $250k to accelerate critical path items (SaaS MVP, concierge critical mass
 **Current State: Functional Prototype (Excel + Manual AI Prompts)**
 
 **What Exists Today:**
-- Excel-based ADVERT framework with 6 pillars and 40+ variables
+- Excel-based ADVERT framework with 8 pillars and 40+ variables
 - Structured prompt templates for Claude/GPT-4 generating quality strategy outputs
 - Proven in SPAWT case study (real client, measurable results, $20k paid)
 - **This works and generates consulting revenue today**
@@ -1611,7 +1611,7 @@ Raise $250k to accelerate critical path items (SaaS MVP, concierge critical mass
 
 **Per-Strategy Generation Cost:**
 - **Input tokens:** ~50,000 (user answers, templates, framework context, examples)
-- **Output tokens:** ~30,000 (comprehensive strategy across 6 pillars, 40+ variables)
+- **Output tokens:** ~30,000 (comprehensive strategy across 8 pillars, 40+ variables)
 - **Total:** ~80,000 tokens per strategy generation
 
 **Claude Sonnet 3.5 Pricing (as of 2026):**
@@ -1690,7 +1690,7 @@ Tech is enabler, not moat. Data + community + brand + methodology refinement = d
 - Single-pillar MVP (Identity pillar only, test AI integration)
 
 **Months 4-6: Core Features**
-- All 6 pillars integrated with AI generation
+- All 8 pillars integrated with AI generation
 - Collapsible UI, wizard mode
 - Visual dashboards (basic charts, progress indicators)
 - Beta testing with 10 consulting clients
@@ -2334,7 +2334,7 @@ Month 3 when ADVERT projections materialize at 92% accuracy, her CEO says "For t
 Sees LinkedIn post from Kofi Mensah (BrandCraft owner) sharing case study: "How we helped a Ghanaian fintech create 5,000 superfans in 6 months with ADVERT." Intrigued by "superfans" metric (never tracked before) and "reliable projections." Visits site, watches demo showing ADVERT nucleus generating complete strategic report. Thinks: "This is exactly what I need."
 
 **Onboarding:**
-Contacts BrandCraft (ADVERT partner agency in Abidjan). First workshop: Kofi guides her through 6 pillars (ADVERT framework). Together they fill variables: OraBank Authenticity, Distinction vs Ecobank, Value promise, etc. In 2 hours, system generates: annual strategy, budget allocated by touchpoint, month-by-month projections. She presents to CEO next day—immediate approval. Thinks: "I should have had this years ago."
+Contacts BrandCraft (ADVERT partner agency in Abidjan). First workshop: Kofi guides her through 8 pillars (ADVERT framework). Together they fill variables: OraBank Authenticity, Distinction vs Ecobank, Value promise, etc. In 2 hours, system generates: annual strategy, budget allocated by touchpoint, month-by-month projections. She presents to CEO next day—immediate approval. Thinks: "I should have had this years ago."
 
 **Core Usage:**
 - **Monday mornings:** Check ADVERT dashboard—see campaign status, KPIs vs projections, alerts (e.g., "Instagram engagement 15% below target, adjust creatives")

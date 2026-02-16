@@ -34,7 +34,7 @@ This document provides the complete epic and story breakdown for ADVERT_01, deco
 - **FR12:** Users can input client interview data using structured frameworks (Ikigai, Schwartz Values, Hero's Journey, AARRR)
 - **FR13:** Users can select a sector template (Fashion, Fintech, FMCG, B2B SaaS) to pre-fill relevant variables (Growth Phase)
 - **FR14:** Users can choose between Wizard Mode (step-by-step questionnaire) or AI Co-Pilot Mode (high-level input)
-- **FR15:** Users can trigger AI generation of 6-pillar strategy (Authenticité, Distinction, Valeur, Engagement, Risk, Track)
+- **FR15:** Users can trigger AI generation of 8-pillar strategy (Authenticité, Distinction, Valeur, Engagement, Risk, Track, Implementation, Strategy)
 - **FR16:** System generates context-adaptive meta-variables based on sector, company profile, and goals
 - **FR17:** Users can view real-time generation progress (pillar-by-pillar status)
 - **FR18:** Users receive notification when strategy generation is complete
@@ -43,7 +43,7 @@ This document provides the complete epic and story breakdown for ADVERT_01, deco
 
 **Strategy Management & Editing:**
 - **FR21:** Users can view a dashboard of all their strategies
-- **FR22:** Users can view individual strategy with 6 pillars displayed in collapsible sections
+- **FR22:** Users can view individual strategy with 8 pillars displayed in collapsible sections
 - **FR23:** Users can expand or collapse specific pillar sections for focused viewing
 - **FR24:** Users can edit strategy content (text, variables, insights)
 - **FR25:** Users can save changes to strategies
@@ -76,7 +76,7 @@ This document provides the complete epic and story breakdown for ADVERT_01, deco
 
 **Analytics & Insights:**
 - **FR48:** Users can view Campaign Coherence Score calculated from pillar completeness and quality
-- **FR49:** Users can view pillar completion status (e.g., 6/6 complete, 4/6 in progress)
+- **FR49:** Users can view pillar completion status (e.g., 8/8 complete, 6/8 in progress)
 - **FR50:** Users can view strategy count (total strategies created)
 - **FR51:** Users can manually input superfan count for client brands (MVP)
 - **FR52:** Users can track superfan growth over time with trend graphs (Growth Phase)
@@ -152,7 +152,7 @@ This document provides the complete epic and story breakdown for ADVERT_01, deco
 ### Non-Functional Requirements
 
 **Performance:**
-- **NFR-P1:** Complete 6-pillar ADVERT strategy generation in less than 10 minutes (target: 8 min avg, 10 min max at 99th percentile)
+- **NFR-P1:** Complete 8-pillar ADVERT strategy generation in less than 10 minutes (target: 8 min avg, 10 min max at 99th percentile)
 - **NFR-P2:** Dashboard loads and becomes interactive in less than 3 seconds on 5+ Mbps connection (target: 2s avg, 3s max at 95th percentile)
 - **NFR-P3:** Strategy view/edit actions respond in less than 500ms (target: 300ms avg, 500ms max at 95th percentile)
 - **NFR-P4:** PDF/Excel exports generate in less than 30 seconds; PowerPoint in less than 60 seconds
@@ -295,7 +295,7 @@ This document provides the complete epic and story breakdown for ADVERT_01, deco
 - FR11: Create new brand strategy project
 - FR12: Input client data using frameworks (Ikigai, Schwartz, Hero's Journey, AARRR)
 - FR14: Choose Wizard Mode or AI Co-Pilot Mode
-- FR15: Trigger AI generation of 6-pillar strategy
+- FR15: Trigger AI generation of 8-pillar strategy
 - FR16: Generate context-adaptive meta-variables
 - FR17: View real-time generation progress
 - FR18: Receive completion notification
@@ -472,7 +472,7 @@ This document provides the complete epic and story breakdown for ADVERT_01, deco
 ---
 
 ### Epic 3: Strategy Creation & AI Generation
-**Goal:** Enable users to create sophisticated 6-pillar brand strategies in under 10 minutes using AI-powered generation with conversational guidance.
+**Goal:** Enable users to create sophisticated 8-pillar brand strategies in under 10 minutes using AI-powered generation with conversational guidance.
 
 **User Outcome:** Amina can create brand strategies by inputting client data through structured frameworks, choose between Wizard Mode or AI Co-Pilot Mode, and receive complete strategies with real-time progress tracking.
 
@@ -485,7 +485,7 @@ This document provides the complete epic and story breakdown for ADVERT_01, deco
 - Interview framework input UI (Ikigai, Schwartz Values, Hero's Journey, AARRR)
 - Wizard Mode (step-by-step questionnaire) and AI Co-Pilot Mode
 - Vercel AI SDK integration with streaming responses
-- 6-pillar generation engine (Authenticité, Distinction, Valeur, Engagement, Risk, Track)
+- 8-pillar generation engine (Authenticité, Distinction, Valeur, Engagement, Risk, Track, Implementation, Strategy)
 - Context-adaptive meta-variable generation
 - Real-time progress indicator (pillar-by-pillar status)
 - Completion notifications
@@ -1738,7 +1738,7 @@ So that **my account is protected even if my password is compromised**.
 
 ## Epic 3: Strategy Creation & AI Generation
 
-**Goal:** Enable users to create sophisticated 6-pillar brand strategies in under 10 minutes using AI-powered generation with conversational guidance.
+**Goal:** Enable users to create sophisticated 8-pillar brand strategies in under 10 minutes using AI-powered generation with conversational guidance.
 
 **User Outcome:** Amina can create brand strategies by inputting client data through structured frameworks, choose between Wizard Mode or AI Co-Pilot Mode, and receive complete strategies with real-time progress tracking.
 
@@ -1748,7 +1748,7 @@ So that **my account is protected even if my password is compromised**.
 
 As a **developer**,
 I want **the Strategy database schema and Prisma models defined**,
-So that **I can store brand strategies with 6-pillar structure and metadata**.
+So that **I can store brand strategies with 8-pillar structure and metadata**.
 
 **Acceptance Criteria:**
 
@@ -1766,7 +1766,7 @@ model Strategy {
   generationMode    GenerationMode
   coherenceScore    Int?
   
-  // 6 Pillar Content (stored as JSON)
+  // 8 Pillar Content (stored as JSON)
   authenticite      Json?
   distinction       Json?
   valeur            Json?
@@ -2161,7 +2161,7 @@ So that **I can provide high-level input and let the AI guide me through the pro
 
 **Given** the conversation progresses
 **When** the AI has enough information
-**Then** the AI asks: "I have enough context now. Should I generate your 6-pillar strategy?"
+**Then** the AI asks: "I have enough context now. Should I generate your 8-pillar strategy?"
 **And** I can respond "Yes" or ask more questions
 **And** if I say "Yes", the AI triggers strategy generation (Story 3.5)
 
@@ -2226,10 +2226,10 @@ So that **I can provide high-level input and let the AI guide me through the pro
 
 ---
 
-### Story 3.5: 6-Pillar AI Generation Engine (Authenticité, Distinction, Valeur, Engagement, Risk, Track)
+### Story 3.5: 6-Pillar AI Generation Engine (Authenticité, Distinction, Valeur, Engagement, Risk, Track, Implementation, Strategy)
 
 As an **authenticated user (Amina)**,
-I want **the AI to generate a complete 6-pillar strategy based on my inputs**,
+I want **the AI to generate a complete 8-pillar strategy based on my inputs**,
 So that **I receive a sophisticated brand strategy in under 10 minutes**.
 
 **Acceptance Criteria:**
@@ -2280,7 +2280,7 @@ So that **I receive a sophisticated brand strategy in under 10 minutes**.
 **Then** the response is parsed and validated as JSON
 **And** the JSON is stored in strategy.authenticite field
 **And** "authenticite" is added to strategy.completedPillars array
-**And** strategy.generationProgress is updated to ~17% (1 of 6 pillars)
+**And** strategy.generationProgress is updated to ~17% (1 of 8 pillars)
 **And** a real-time update is sent to the frontend via WebSocket or polling
 
 **Given** the Distinction pillar is being generated
@@ -2312,7 +2312,7 @@ So that **I receive a sophisticated brand strategy in under 10 minutes**.
 ```
 
 **Given** each pillar is generated sequentially
-**When** all 6 pillars complete
+**When** all 8 pillars complete
 **Then** the strategy has:
 - Authenticité (identity, values, story)
 - Distinction (personas, positioning, competitive advantage)
@@ -2359,7 +2359,7 @@ So that **I receive a sophisticated brand strategy in under 10 minutes**.
 
 **Given** the generation is complete
 **When** I review the generated strategy
-**Then** I see all 6 pillars with rich, structured content
+**Then** I see all 8 pillars with rich, structured content
 **And** the content is coherent across pillars (Distinction references Authenticité, etc.)
 **And** the quality is 80%+ usable (NFR-P1: 80%+ directly usable content)
 **And** the content incorporates all framework data provided
@@ -2383,7 +2383,7 @@ So that **I receive a sophisticated brand strategy in under 10 minutes**.
 
 As an **authenticated user (Amina)**,
 I want **the AI to generate meta-variables that adapt to my brand's sector and context**,
-So that **the strategy includes industry-specific variables beyond the core 6 pillars**.
+So that **the strategy includes industry-specific variables beyond the core 8 pillars**.
 
 **Acceptance Criteria:**
 
@@ -2447,7 +2447,7 @@ So that **the strategy includes industry-specific variables beyond the core 6 pi
 **Given** meta-variables are generated
 **When** I view the strategy
 **Then** meta-variables are displayed in a dedicated section
-**And** they enhance the core 6 pillars with sector-specific insights
+**And** they enhance the core 8 pillars with sector-specific insights
 **And** they're editable (I can modify generated meta-variables)
 
 **Given** the AI generates meta-variables
@@ -2507,7 +2507,7 @@ So that **I know the AI is working and can estimate when it will be ready**.
 - Overall progress percentage (0-100%)
 - Visual progress bar
 - Current pillar being generated
-- List of 6 pillars with status indicators (pending, in-progress, completed)
+- List of 8 pillars with status indicators (pending, in-progress, completed)
 - Estimated time remaining
 
 **Given** generation just started
@@ -2540,7 +2540,7 @@ So that **I know the AI is working and can estimate when it will be ready**.
 - "Distinction - In Progress..." (1:30-3:00)
 - "Distinction - Completed ✓" (3:00)
 - "Valeur - In Progress..." (3:00-4:30)
-- And so on through all 6 pillars
+- And so on through all 8 pillars
 
 **Given** each pillar completes
 **When** the progress updates
@@ -2549,7 +2549,7 @@ So that **I know the AI is working and can estimate when it will be ready**.
 **And** the visual progress bar animates smoothly (Framer Motion)
 
 **Given** generation is complete (100%)
-**When** all 6 pillars are generated
+**When** all 8 pillars are generated
 **Then** I see a success message: "Strategy completed! 🎉"
 **And** I see a "View Strategy" button
 **And** I see confetti animation or subtle celebration (Framer Motion)
@@ -2558,7 +2558,7 @@ So that **I know the AI is working and can estimate when it will be ready**.
 **Given** generation completes
 **When** I click "View Strategy"
 **Then** I am redirected to `/strategies/{strategyId}`
-**And** I see the full generated strategy with all 6 pillars
+**And** I see the full generated strategy with all 8 pillars
 **And** each pillar is expandable/collapsible
 
 **Given** I receive a completion notification
@@ -2852,7 +2852,7 @@ So that **I can easily find and manage my strategy portfolio**.
 ### Story 4.2: Strategy Detail View with Collapsible 6-Pillar Sections
 
 As an **authenticated user (Amina)**,
-I want **to view a strategy with all 6 pillars in an organized, collapsible layout**,
+I want **to view a strategy with all 8 pillars in an organized, collapsible layout**,
 So that **I can focus on specific sections without being overwhelmed**.
 
 **Acceptance Criteria:**
@@ -2863,7 +2863,7 @@ So that **I can focus on specific sections without being overwhelmed**.
 **And** the page displays:
 - Strategy header (brand name, title, status, coherence score)
 - Action buttons: Edit, Duplicate, Archive, Delete, Export
-- 6 pillar sections (Authenticité, Distinction, Valeur, Engagement, Risk, Track)
+- 8 pillar sections (Authenticité, Distinction, Valeur, Engagement, Risk, Track, Implementation, Strategy)
 - Meta-variables section (if generated)
 - Sidebar with navigation anchors
 
@@ -2877,7 +2877,7 @@ So that **I can focus on specific sections without being overwhelmed**.
 - Creation date and last updated date
 - "Back to Dashboard" link or breadcrumb
 
-**Given** I view the 6-pillar sections
+**Given** I view the 8-pillar sections
 **When** I scroll down
 **Then** I see each pillar as a collapsible section:
 1. **Authenticité**
@@ -2891,7 +2891,7 @@ So that **I can focus on specific sections without being overwhelmed**.
 
 **Given** all pillars are initially collapsed (default state)
 **When** the page loads
-**Then** I see all 6 pillar headers with summary lines
+**Then** I see all 8 pillar headers with summary lines
 **And** I can see the full page structure at a glance
 **And** no pillar content is visible (collapsed)
 
@@ -2910,7 +2910,7 @@ So that **I can focus on specific sections without being overwhelmed**.
 
 **Given** I want to expand all pillars at once
 **When** I click "Expand All" button (top of page)
-**Then** all 6 pillars expand simultaneously
+**Then** all 8 pillars expand simultaneously
 **And** I can see the full strategy content
 **And** the button changes to "Collapse All"
 
@@ -3016,7 +3016,7 @@ So that **I can choose the right plan for my business needs**.
 - Description: "Try ADVERT risk-free"
 - Feature list:
   - ✓ 1 active strategy
-  - ✓ AI-powered 6-pillar generation
+  - ✓ AI-powered 8-pillar generation
   - ✓ Basic frameworks (Ikigai, Schwartz, Hero's Journey, AARRR)
   - ✓ PDF export
   - ✗ Excel export
@@ -4197,7 +4197,7 @@ So that **I can accelerate strategy creation with industry-appropriate starting 
   - Key Success Metrics: Active users, Transaction volume, Customer acquisition cost
   - Competitive Landscape: Traditional banks vs. Digital wallets, Regulatory compliance
   - Trust Factors: Security certifications, Regulatory licenses, User testimonials
-**And** when AI generates the 6 pillars (FR15), it uses these meta-variables as context
+**And** when AI generates the 8 pillars (FR15), it uses these meta-variables as context
 
 **Given** I select FMCG template
 **When** I proceed with the template
@@ -4308,7 +4308,7 @@ So that **I can see what changed over time and understand the evolution of my wo
 - Version number (incremental: v1, v2, v3...)
 - Timestamp (when saved)
 - User who saved it (if team collaboration enabled - Epic 9)
-- Snapshot of strategy data (all 6 pillars JSON, meta-variables, title, brand name)
+- Snapshot of strategy data (all 8 pillars JSON, meta-variables, title, brand name)
 - Change summary (optional: auto-generated or user-provided)
 
 **Given** I want to view version history
@@ -4564,7 +4564,7 @@ So that **I can recover from mistakes or revert to a better state**.
 **Given** restoration affects all pillars and meta-variables
 **When** I restore a version
 **Then** ALL strategy data is restored:
-  - All 6 pillar JSON (Authenticité, Distinction, Valeur, Engagement, Risk, Track)
+  - All 8 pillar JSON (Authenticité, Distinction, Valeur, Engagement, Risk, Track, Implementation, Strategy)
   - Meta-variables
   - Brand name and title
   - Status (if changed)
@@ -4630,7 +4630,7 @@ So that **I can present it to clients, stakeholders, or team members in a profes
 **And** the modal displays:
 - Title: "Export as PowerPoint"
 - Export options:
-  - Include all 6 pillars (checked by default)
+  - Include all 8 pillars (checked by default)
   - Or select specific pillars to include (checkboxes)
   - Include meta-variables section (checkbox)
   - Include coherence score summary (checkbox)
@@ -4678,7 +4678,7 @@ So that **I can present it to clients, stakeholders, or team members in a profes
   - **Slide 2 (Strategy Overview):**
     - Brand name and tagline
     - Coherence score: "Campaign Coherence Score: 85"
-    - Pillar completion status: "6/6 Pillars Complete"
+    - Pillar completion status: "8/8 Pillars Complete"
     - Strategy creation date
   - **Slide 3 (Table of Contents):**
     - List of included pillars with icons
@@ -5015,7 +5015,7 @@ So that **I can deliver strategies without leaving ADVERT or managing file attac
 
       Please find attached the ADVERT strategy for {Brand Name}.
 
-      This document includes the 6-pillar brand strategy framework covering Authenticité, Distinction, Valeur, Engagement, Risk, and Track.
+      This document includes the 8-pillar brand strategy framework covering Authenticité, Distinction, Valeur, Engagement, Risk, and Track.
 
       Let me know if you have any questions or need revisions.
 
@@ -6035,7 +6035,7 @@ So that **my team can collaborate, ask questions, and provide feedback directly 
 
 **Given** I am viewing a strategy with team access
 **When** I navigate to a strategy detail page
-**Then** I see a "Comments" section at the bottom of each pillar (Authenticité, Distinction, Valeur, Engagement, Risk, Track)
+**Then** I see a "Comments" section at the bottom of each pillar (Authenticité, Distinction, Valeur, Engagement, Risk, Track, Implementation, Strategy)
 **And** each pillar has its own independent comment thread
 
 **Given** the comments section is visible
@@ -6716,7 +6716,7 @@ So that **I can understand where my brand stands relative to industry standards*
 **Then** I see a radar/spider chart comparing my strategy across multiple dimensions:
 - Coherence Score
 - Superfan Growth
-- Pillar Completeness (6/6)
+- Pillar Completeness (8/8)
 - Engagement Depth (ritual count, campaign count)
 - Risk Mitigation (SWOT completeness)
 **And** each axis shows my value vs. sector average
@@ -8251,7 +8251,7 @@ So that **I find the most suitable talents without manual searching**.
 **Given** I click "Get AI Recommendations"
 **When** the AI matching process runs
 **Then** the system:
-1. Analyzes my ADVERT strategy pillars (Authenticité, Distinction, Valeur, Engagement, Risk, Track)
+1. Analyzes my ADVERT strategy pillars (Authenticité, Distinction, Valeur, Engagement, Risk, Track, Implementation, Strategy)
 2. Extracts key requirements:
    - Sector: Fashion
    - Brand values: Sustainability, Authenticity
@@ -10992,7 +10992,7 @@ IntegrationLink:
 - Click: Opens HubSpot campaign in new tab
 
 **Given** I enable "Create HubSpot deals for each pillar"
-**When** I generate a strategy with 6 pillars
+**When** I generate a strategy with 8 pillars
 **Then** ADVERT creates 6 HubSpot deals:
 - Deal 1: "Zahra Fashion House - Pillar 1: Heritage Craftsmanship"
 - Deal 2: "Zahra Fashion House - Pillar 2: Sustainable Fashion"
@@ -13938,7 +13938,7 @@ So that **I can access it like a native app without browser chrome and continue 
 {
   "name": "ADVERT - AI-Powered Brand Strategy",
   "short_name": "ADVERT",
-  "description": "Create 6-pillar marketing strategies with AI co-pilot in <10 minutes",
+  "description": "Create 8-pillar marketing strategies with AI co-pilot in <10 minutes",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -14957,7 +14957,7 @@ So that **I can independently use all features without visual cues**.
 **Given** I use dynamic content (strategy generation)
 **When** the AI generates a pillar
 **Then** I hear progress updates:
-- "Status: Generating pillar 1 of 6..."
+- "Status: Generating pillar 1 of 8..."
 - "Status: Pillar 1 complete"
 - "Alert: Strategy generated successfully"
 
@@ -16084,7 +16084,7 @@ So that **I quickly understand how to use ADVERT and create my first strategy wi
 **When** I complete registration and log in for the first time
 **Then** I see a welcome screen:
 - Title: "Welcome to ADVERT! 🎉"
-- Subtitle: "Let's create your first 6-pillar strategy in <10 minutes"
+- Subtitle: "Let's create your first 8-pillar strategy in <10 minutes"
 - "Start Tutorial" button (primary)
 - "Skip for now" link (subtle)
 
@@ -16129,13 +16129,13 @@ So that **I quickly understand how to use ADVERT and create my first strategy wi
 **Step 6: Strategy Generated (Success Celebration)**
 - Confetti animation 🎉
 - Modal: "Your First Strategy is Ready!"
-- Preview of generated strategy with 6 pillars
+- Preview of generated strategy with 8 pillars
 - "Explore Your Strategy" button
 - Badge earned: "First Strategy Created" 🏆
 
 **Step 7: Strategy Features Tour (Interactive)**
 - Spotlight on each feature:
-  - Pillar 1: "Each strategy has 6 pillars. Click to expand."
+  - Pillar 1: "Each strategy has 8 pillars. Click to expand."
   - Edit button: "Make changes anytime by clicking Edit."
   - Export button: "Export as PDF, PowerPoint, or Excel."
   - Analytics: "Track your strategy performance here."
@@ -16170,7 +16170,7 @@ So that **I quickly understand how to use ADVERT and create my first strategy wi
 **When** I complete it
 **Then** I see a congratulatory modal:
 - "Awesome! Your First Strategy is Complete! 🎉"
-- Stats: "6 pillars created, 24 tactics defined, 12 KPIs tracked"
+- Stats: "8 pillars created, 24 tactics defined, 12 KPIs tracked"
 - "Share your achievement" (optional social share)
 - "Create Another Strategy" button
 
@@ -16375,7 +16375,7 @@ I want **to convert ADVERT strategy recommendations into a detailed 12-24 month 
 So that **clients have a clear, actionable path forward and I can deliver "strategy-to-execution" services**.
 
 **Acceptance Criteria:**
-- Roadmap generated from any ADVERT nucleus (all 6 pillars)
+- Roadmap generated from any ADVERT nucleus (all 8 pillars)
 - Timeline configurable: 6/12/18/24 months
 - Minimum 15 implementation phases with milestones
 - Dependency mapping between phases shown visually
@@ -16468,7 +16468,7 @@ So that **clients can share the plan across their organization**.
 **Why This Epic Matters:** Strategy documents are static artifacts; by Month 2 they're gathering dust. Pilier S transforms strategy into a living system with real-time visibility. Executives can see at a glance: Are we on track? What's working? What needs adjustment? The cockpit enables monthly strategic conversations backed by data instead of gut feel.
 
 **Key Features:**
-- Real-time dashboard of all 6 pillars + Pilier I implementation progress
+- Real-time dashboard of all 8 pillars + Pilier I implementation progress
 - Financial clarity: budget allocation, spend tracking, ROI monitoring
 - Campaign coherence scoring with real-time updates
 - Superfan community health metrics and growth tracking
@@ -16487,7 +16487,7 @@ I want **to create an intuitive, information-rich dashboard layout showing all k
 So that **executives can grasp strategic status at a glance**.
 
 **Acceptance Criteria:**
-- 6 pillar status cards (progress %, key metrics, alerts)
+- 8 pillar status cards (progress %, key metrics, alerts)
 - Pilier I implementation progress (phases complete, on-track status)
 - Campaign coherence score (real-time update)
 - Superfan growth trend graph
@@ -16507,7 +16507,7 @@ So that **users always see current strategic status without manual refresh**.
 **Acceptance Criteria:**
 - WebSocket or Server-Sent Events (SSE) for real-time updates
 - <100ms latency for data refresh
-- All 6 pillars sync automatically when updated
+- All 8 pillars sync automatically when updated
 - Pilier I implementation progress updates in real-time
 - Financial data syncs from connected tools (Zoho, HubSpot)
 - Graceful degradation if real-time connection fails (fallback to polling)

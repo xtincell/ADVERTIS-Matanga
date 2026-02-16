@@ -557,7 +557,7 @@ Sources :
 - Chapitre 1 : « Pourquoi les Marques Échouent » — Le problème de la fragmentation, l'économie des superfans, l'opportunité africaine. Accrocher le lecteur avec la douleur qu'il ressent déjà.
 - Chapitre 2 : « La Méthode ADVERT » — Vue d'ensemble de la cascade à 7 piliers (A→D→V→E→R→T→S). La logique séquentielle expliquée. Pourquoi cet ordre compte. Ce qui la rend antifragile.
 
-**Partie II — Les 6 Piliers (Chapitres 3-8)**
+**Partie II — Les 8 Piliers (Chapitres 3-10)**
 Chaque chapitre de pilier suit une structure cohérente :
 1. **Ce que fait ce pilier** — Explication simple, accessible aux juniors
 2. **Les variables** — Chaque variable expliquée en langage ADVERT (pas en jargon académique)

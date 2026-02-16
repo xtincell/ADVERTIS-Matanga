@@ -77,7 +77,7 @@ Successfully loaded the following documents for validation context:
 
 **Vision Statement:** ✅ **Fully Covered**
 - Product Brief vision and core value proposition mapped to Success Criteria, Innovation & Novel Patterns, and Project Scoping sections
-- 6-pillar ADVERT methodology (A-D-V-E-R-T) documented throughout PRD
+- 8-pillar ADVERT methodology (A-D-V-E-R-T) documented throughout PRD
 
 **Target Users:** ✅ **Fully Covered**
 - Product Brief identifies: Agency directors (Amina), Brand directors (Kofi), Creative talent (Yasmine), DevTeams
@@ -91,7 +91,7 @@ Successfully loaded the following documents for validation context:
   - User Journeys: Amina's "cercle vicieux de la médiocrité" narrative
 
 **Key Features:** ✅ **Fully Covered**
-- Product Brief features (6-pillar generation, AI co-pilot, Creative Concierge, integrations) mapped to:
+- Product Brief features (8-pillar generation, AI co-pilot, Creative Concierge, integrations) mapped to:
   - 112 Functional Requirements across 10 capability areas
   - MVP Feature Set in Project Scoping section
   - SaaS B2B Specific Requirements (multi-tenancy, RBAC, tiers, integrations)

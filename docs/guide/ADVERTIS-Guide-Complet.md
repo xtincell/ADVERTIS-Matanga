@@ -42,7 +42,7 @@ copyright: "© 2026 Alexandre DJENGUE — Tous droits réservés. La Méthode AD
 
 **Partie I — Les Fondations**
 - [Chapitre 1 : Pourquoi les Marques Échouent](#chapitre-1--pourquoi-les-marques-échouent)
-- [Chapitre 2 : La Méthode ADVERT — Vue d'Ensemble](#chapitre-2--la-méthode-advert--vue-densemble)
+- [Chapitre 2 : La Méthode ADVERTIS — Vue d'Ensemble](#chapitre-2--la-méthode-advertis--vue-densemble)
 
 **Partie II — Les 8 Piliers ADVERTIS**
 - [Chapitre 3 : S — Strategy (Document + Interface)](#chapitre-3--s--strategy--document--interface)
@@ -61,7 +61,7 @@ copyright: "© 2026 Alexandre DJENGUE — Tous droits réservés. La Méthode AD
 - [Et Maintenant ?](#et-maintenant-)
 
 **Annexes — Le Cahier de Terrain**
-- [Annexe A : Variables Complètes](#annexe-a-liste-complète-des-variables-advert)
+- [Annexe A : Variables Complètes](#annexe-a-liste-complète-des-variables-advertis-v20)
 - [Annexe B : Templates par Pilier](#annexe-b-templates-par-pilier-worksheets-et-canevas)
 - [Annexe C : Questions d'Entretien Client](#annexe-c-banque-de-questions-dentretien-client)
 - [Annexe D : Template SWOT](#annexe-d-template-de-génération-swot-pour-le-pilier-r)
@@ -146,13 +146,13 @@ Ce guide est votre outil. Prenez-le. Utilisez-le. Construisez des marques qui co
 
 ---
 
-## Chapitre 2 : La Méthode ADVERT — Vue d'Ensemble
+## Chapitre 2 : La Méthode ADVERTIS — Vue d'Ensemble
 
-### La Cascade A→D→V→E→R→T + S
+### La Cascade A→D→V→E→R→T→I→S
 
-ADVERT n'est pas un acronyme marketing. C'est une **architecture**.
+ADVERTIS n'est pas un acronyme marketing. C'est une **architecture**.
 
-Six piliers visibles. Un pilier caché. Une cascade séquentielle où chaque étape construit sur la précédente. Voici la structure complète :
+Huit piliers. Une cascade séquentielle où chaque étape construit sur la précédente. Voici la structure complète :
 
 | Pilier | Nom | Ce qu'il produit |
 |---|---|---|
@@ -162,11 +162,12 @@ Six piliers visibles. Un pilier caché. Une cascade séquentielle où chaque ét
 | **E** | Engagement | Les liens avec l'audience — touchpoints, rituels, communauté, gamification |
 | **R** | Risk | Le stress-test — SWOT sur chaque variable, score de risque, mitigations |
 | **T** | Track | La confrontation au réel — données marché, validation, TAM/SAM/SOM |
-| **S** | Strategy *(caché)* | Le livrable — document de stratégie 360°, briefs, plans d'action |
+| **I** | Innovation & Implementation | La feuille de route exécutable — roadmap, budget, quick wins, équipe |
+| **S** | Strategy (dual) | Le livrable — Document S (Strategy Bible PDF) + Interface S (Strategic Cockpit) |
 
 ### Pourquoi Cet Ordre Est Non-Négociable
 
-La séquence A→D→V→E→R→T n'est pas arbitraire. C'est une **logique de dépendances** :
+La séquence A→D→V→E→R→T→I→S n'est pas arbitraire. C'est une **logique de dépendances** :
 
 **A avant D** — Vous ne pouvez pas vous distinguer si vous ne savez pas qui vous êtes. L'identité précède le positionnement.
 
@@ -261,7 +262,7 @@ Passons aux piliers.
 
 ---
 
-# PARTIE II — LES 6 PILIERS
+# PARTIE II — LES 8 PILIERS ADVERTIS
 
 ---
 
