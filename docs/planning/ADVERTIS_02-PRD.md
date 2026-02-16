@@ -80,12 +80,12 @@ Quand l'agency director livre une stratégie ADVERT-powered à son client et:
 ### Technical Success
 
 **AI Generation Performance:**
-- **Speed:** Complete ADVERT file (6 pillars, 40+ variables) generated in **<10 minutes**
+- **Speed:** Complete ADVERT file (8 pillars, 40+ variables) generated in **<10 minutes**
 - **Precision:** 80%+ content directly usable (20% requires human refinement - this is the hybrid workflow)
 - **Cost efficiency:** API costs <$1 per strategy generation (maintain 93%+ gross margins)
 
 **System Reliability:**
-- **Multi-agent coordination:** 6 pillar agents execute sequentially without failures
+- **Multi-agent coordination:** 8 pillar agents execute sequentially without failures
 - **Data consistency:** Living document - modify one variable → intelligent cascade adjustments work correctly
 - **Meta-variable generation:** Context-adaptive variables generate appropriately for different sectors
 
@@ -130,7 +130,7 @@ Quand l'agency director livre une stratégie ADVERT-powered à son client et:
 **Timeline:** Months 1-12
 
 **Core Functionality:**
-1. **ADVERT Nucleus (6 Pillars):**
+1. **ADVERT Nucleus (8 Pillars):**
    - Single-LLM architecture (Claude Sonnet 3.5)
    - Sequential generation: A→D→V→E→R→T
    - 40+ variables with meta-variable generation
@@ -231,7 +231,7 @@ Elle pense: "Je ne peux pas continuer comme ça. McCann livre en 4 semaines ce q
 **Rising Action - La Découverte:**
 Lundi matin, café networking. Un confrère mentionne: "Tu as entendu parler de ADVERT? spark01 a lancé un truc - méthode propriétaire + IA. Il a livré une stratégie complète pour SPAWT en 4 semaines. J'ai vu le doc, c'est du niveau Havas mais à fraction du prix."
 
-Amina est sceptique mais désespérée. Elle contacte spark01. Démo: interface web, 6 pillars (Authenticité, Distinction, Valeur, Engagement, Risk, Track), AI co-pilot mode. spark01 explique: "Tu fournis l'insight humain - 6h d'interview client. ADVERT génère le reste en 10 minutes. Tu affines. Total: 4 semaines au lieu de 12."
+Amina est sceptique mais désespérée. Elle contacte spark01. Démo: interface web, 8 pillars (Authenticité, Distinction, Valeur, Engagement, Risk, Track, Implementation, Strategy), AI co-pilot mode. spark01 explique: "Tu fournis l'insight humain - 6h d'interview client. ADVERT génère le reste en 10 minutes. Tu affines. Total: 4 semaines au lieu de 12."
 
 Prix: $20k package ADVERT Brand Launch. C'est cher pour Amina, mais...
 
@@ -260,7 +260,7 @@ Amina dit à ses confrères: "ADVERT m'a donné les armes pour rivaliser. Je liv
 
 **Capabilities Revealed:**
 - AI-powered strategy generation (<10 min complete file)
-- 6-pillar framework UI (collapsible, wizard mode)
+- 8-pillar framework UI (collapsible, wizard mode)
 - Client interview templates (Ikigai, Schwartz, Hero's Journey)
 - Campaign calendar generation
 - SWOT automation per variable
@@ -380,7 +380,7 @@ Bonus: Rights portfolio + credit public. Elle post case study Behance → Featur
 - Yasmine a complété 24 projets via Concierge
 - Revenue annuel: 42 millions FCFA ($68k) - **2x son objectif Paris**
 - Portfolio world-class (5 Featured Behance projects)
-- ADVERT-Certified Creative Strategist (formation 6-pillar framework)
+- ADVERT-Certified Creative Strategist (formation 8-pillar framework)
 - Elle mentor 3 junior designers Dakar
 - **Elle a refusé Paris**
 
@@ -469,7 +469,7 @@ Chidi dit: "API nous a permis d'adopter ADVERT sans disruption. Nos tools exista
 Les 4 journeys révèlent ces **capability areas critiques:**
 
 **Core Strategy Generation:**
-- AI-powered 6-pillar framework (A-D-V-E-R-T)
+- AI-powered 8-pillar framework (A-D-V-E-R-T)
 - <10 min complete file generation
 - 40+ variables with meta-generation
 - Wizard mode + AI co-pilot
@@ -720,7 +720,7 @@ ADVERT demonstrates **7 distinct innovation vectors** that differentiate it from
 **AI Content Tools (Jasper, Copy.ai, ChatGPT):**
 - **Strengths:** Fast content generation, low cost, accessible
 - **Weaknesses:** Generic output, no strategic framework, prompt engineering burden on user, no psychological grounding
-- **ADVERT Differentiation:** Structured 6-pillar methodology, psychology integration, strategy + execution, living document
+- **ADVERT Differentiation:** Structured 8-pillar methodology, psychology integration, strategy + execution, living document
 
 **Competitive Gaps ADVERT Fills:**
 
@@ -742,7 +742,7 @@ ADVERT demonstrates **7 distinct innovation vectors** that differentiate it from
 **Most Defensible Innovation: Psychology-Grounded Proprietary Methodology**
 
 **Why Most Defensible:**
-- Documented framework (6 pillars) with clear psychological foundations
+- Documented framework (8 pillars) with clear psychological foundations
 - Based on established theories (Schwartz Values, Ikigai, Hero's Journey) - credibility via academic rigor
 - Trademark/IP protection possible (framework naming, process documentation)
 - Network effects: More usage → More data → Better insights → Stronger methodology
@@ -1547,7 +1547,7 @@ ADVERT approaches compliance as **progressive maturity** aligned with business p
 **Phase 1 (MVP - Months 1-6):**
 - Single-tenant SaaS with basic RBAC (Agency Owner + Consultant roles)
 - Payment integration (Paystack, Flutterwave) for subscription billing
-- Core ADVERT generation engine (6-pillar AI workflow)
+- Core ADVERT generation engine (8-pillar AI workflow)
 - PDF export only (simplify MVP scope)
 
 **Phase 2 (MVP - Months 7-12):**
@@ -1678,7 +1678,7 @@ ADVERT adopts a **consulting-led, SaaS-enabled** MVP strategy that prioritizes r
 - **Cash Flow:** $600k consulting revenue (Year 1) sustains 2-3 engineers building SaaS MVP
 
 **2. Methodology Validation Before Scale**
-- **Problem:** Can't validate 6-pillar framework + AI generation quality without real clients
+- **Problem:** Can't validate 8-pillar framework + AI generation quality without real clients
 - **ADVERT Solution:** 30 consulting engagements = 30 real-world tests of methodology
 - **Proof Points:** SPAWT case study + 29 more = undeniable methodology effectiveness
 - **Risk Mitigation:** If methodology fails, pivot BEFORE investing $500k in SaaS platform
@@ -1764,7 +1764,7 @@ ADVERT adopts a **consulting-led, SaaS-enabled** MVP strategy that prioritizes r
 - ✅ **Journey Coverage:** 100% (consulting delivery workflow)
 - **Key Moments:**
   - Interview client using ADVERT frameworks (Ikigai, Schwartz, Hero's Journey)
-  - Generate 6-pillar strategy via web interface (or manual Claude API initially)
+  - Generate 8-pillar strategy via web interface (or manual Claude API initially)
   - Edit/refine AI output (20% human touch)
   - Export branded PDF for client presentation
   - Track client satisfaction and outcomes
@@ -1790,7 +1790,7 @@ ADVERT adopts a **consulting-led, SaaS-enabled** MVP strategy that prioritizes r
 
 **Must-Have Capabilities (Non-Negotiable for MVP):**
 
-**1. ADVERT Strategy Generation (6 Pillars)**
+**1. ADVERT Strategy Generation (8 Pillars)**
 - **Status:** MUST HAVE - This IS the product
 - **Technical Approach:**
   - Single Claude Sonnet 3.5 API call with structured prompt
@@ -1805,7 +1805,7 @@ ADVERT adopts a **consulting-led, SaaS-enabled** MVP strategy that prioritizes r
 - **Features:**
   - User authentication (email/password, no social login MVP)
   - Create new strategy (wizard mode OR AI co-pilot mode)
-  - View strategy dashboard (6 pillars collapsible sections)
+  - View strategy dashboard (8 pillars collapsible sections)
   - Edit strategy (text editing, not advanced formatting)
   - Save/load strategies (project storage)
 - **NOT Included:**
@@ -1861,7 +1861,7 @@ ADVERT adopts a **consulting-led, SaaS-enabled** MVP strategy that prioritizes r
 - **Status:** MUST HAVE - User value visibility
 - **Metrics:**
   - Campaign Coherence Score (calculated from pillar completeness)
-  - Pillar completion status (6/6 complete vs 4/6)
+  - Pillar completion status (8/8 complete vs 6/8)
   - Strategy count (how many created)
 - **NOT Included:**
   - Benchmarking (no sector averages without data)
@@ -2196,7 +2196,7 @@ ADVERT adopts a **consulting-led, SaaS-enabled** MVP strategy that prioritizes r
 - **Impact:** Low consulting demand, revenue shortfall
 - **Likelihood:** Medium (AI commoditization is real threat)
 - **Mitigation:**
-  - **Methodology Differentiation:** ADVERT is NOT ChatGPT - it's 6-pillar framework + psychology + structured output
+  - **Methodology Differentiation:** ADVERT is NOT ChatGPT - it's 8-pillar framework + psychology + structured output
   - **Proof Points:** SPAWT case study + testimonials demonstrate value beyond generic AI
   - **Consulting Delivery:** Human expertise (spark01) + AI = hybrid value (not pure automation)
   - **Pricing Strategy:** Beta pricing $15k (de-risk adoption), then $20k after 10 clients
@@ -2312,7 +2312,7 @@ ADVERT adopts **progressive de-risking** with clear checkpoints:
 - **FR12:** Users can input client interview data using structured frameworks (Ikigai, Schwartz Values, Hero's Journey, AARRR)
 - **FR13:** Users can select a sector template (Fashion, Fintech, FMCG, B2B SaaS) to pre-fill relevant variables (Growth Phase)
 - **FR14:** Users can choose between Wizard Mode (step-by-step questionnaire) or AI Co-Pilot Mode (high-level input)
-- **FR15:** Users can trigger AI generation of 6-pillar strategy (Authenticité, Distinction, Valeur, Engagement, Risk, Track)
+- **FR15:** Users can trigger AI generation of 8-pillar strategy (Authenticité, Distinction, Valeur, Engagement, Risk, Track, Implementation, Strategy)
 - **FR16:** System generates context-adaptive meta-variables based on sector, company profile, and goals
 - **FR17:** Users can view real-time generation progress (pillar-by-pillar status)
 - **FR18:** Users receive notification when strategy generation is complete
@@ -2322,7 +2322,7 @@ ADVERT adopts **progressive de-risking** with clear checkpoints:
 ### Strategy Management & Editing
 
 - **FR21:** Users can view a dashboard of all their strategies
-- **FR22:** Users can view individual strategy with 6 pillars displayed in collapsible sections
+- **FR22:** Users can view individual strategy with 8 pillars displayed in collapsible sections
 - **FR23:** Users can expand or collapse specific pillar sections for focused viewing
 - **FR24:** Users can edit strategy content (text, variables, insights)
 - **FR25:** Users can save changes to strategies
@@ -2358,7 +2358,7 @@ ADVERT adopts **progressive de-risking** with clear checkpoints:
 ### Analytics & Insights
 
 - **FR48:** Users can view Campaign Coherence Score calculated from pillar completeness and quality
-- **FR49:** Users can view pillar completion status (e.g., 6/6 complete, 4/6 in progress)
+- **FR49:** Users can view pillar completion status (e.g., 8/8 complete, 6/8 in progress)
 - **FR50:** Users can view strategy count (total strategies created)
 - **FR51:** Users can manually input superfan count for client brands (MVP)
 - **FR52:** Users can track superfan growth over time with trend graphs (Growth Phase)
@@ -2443,7 +2443,7 @@ ADVERT adopts **progressive de-risking** with clear checkpoints:
 ### Performance
 
 **NFR-P1: AI Strategy Generation Speed**
-- Complete 6-pillar ADVERT strategy generation (all 40+ variables) in **less than 10 minutes** from initiation to completion
+- Complete 8-pillar ADVERT strategy generation (all 40+ variables) in **less than 10 minutes** from initiation to completion
 - Target: 8 minutes average, 10 minutes maximum (99th percentile)
 - Measurement: Time from "Generate" button click to "Generation Complete" notification
 - Rationale: Users (Amina) expect fast turnaround; 10 minutes enables same-session workflow

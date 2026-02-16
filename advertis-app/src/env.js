@@ -12,7 +12,10 @@ export const env = createEnv({
         ? z.string()
         : z.string().optional(),
     DATABASE_URL: z.string().url(),
-    ANTHROPIC_API_KEY: z.string().optional(),
+    ANTHROPIC_API_KEY:
+      process.env.NODE_ENV === "production"
+        ? z.string().min(1, "ANTHROPIC_API_KEY is required in production")
+        : z.string().optional(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),

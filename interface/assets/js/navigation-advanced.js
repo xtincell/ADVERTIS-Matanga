@@ -557,9 +557,21 @@ class SearchEngine {
     resultsContainer.classList.add('active');
   }
 
+  escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  escapeRegex(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
   highlightQuery(text, query) {
-    const regex = new RegExp(`(${query})`, 'gi');
-    return text.replace(regex, '<span class="search-highlight">$1</span>');
+    const safeText = this.escapeHtml(text);
+    const safeQuery = this.escapeRegex(query);
+    const regex = new RegExp(`(${safeQuery})`, 'gi');
+    return safeText.replace(regex, '<span class="search-highlight">$1</span>');
   }
 }
 

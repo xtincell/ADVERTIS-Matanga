@@ -593,7 +593,7 @@ Based on all research conducted, Mary recommends the following structure for the
 - Chapter 1: "Why Brands Fail" — The fragmentation problem, the superfan economy, the African opportunity. Hook the reader with the pain they already feel.
 - Chapter 2: "The ADVERT Method" — Overview of the 7-pillar cascade (A→D→V→E→R→T→S). The sequential logic explained. Why this order matters. What makes it antifragile.
 
-**Part II — The 6 Pillars (Chapters 3-8)**
+**Part II — The 8 Pillars (Chapters 3-10)**
 Each pillar chapter follows a consistent structure:
 1. **What this pillar does** — Simple, junior-friendly explanation
 2. **The variables** — Each variable explained in ADVERT language (not academic jargon)

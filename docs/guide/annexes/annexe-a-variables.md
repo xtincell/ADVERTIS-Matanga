@@ -121,11 +121,11 @@ Utilisez-le pour :
 | S3 | **Calendrier Stratégique** | Court terme (0-6 mois), moyen terme (6-18 mois), long terme (18-36 mois) | Prioriser les actions par horizon temporel | Calendrier d'exécution |
 | S4 | **Briefs Créatifs** | Briefs production-ready pour agences | Chaque brief tracé vers le pilier et la variable qui le justifie | Briefs identité visuelle, campagne, contenu |
 | S5 ★ | **Document S (Stratégie 360°)** | Livrable textuel complet — tous les piliers en détail, 50-80 pages | Compilation de A→T + recommandations I | Document PDF/Word consultable, archivable |
-| S6 ★ | **Interface S (Tableau de Bord Dynamique)** | Version numérique interactive — dashboard ADVERT avec synthèse, KPIs, alertes | Exportation des données de toute l'analyse vers le SaaS | Dashboard vivant, mise à jour périodique possible |
+| S6 ★ | **Interface S (Tableau de Bord Dynamique)** | Version numérique interactive — dashboard ADVERTIS avec synthèse, KPIs, alertes | Exportation des données de toute l'analyse vers le SaaS | Dashboard vivant, mise à jour périodique possible |
 
 ---
 
-**Total : 47 variables principales réparties sur 9 piliers — dont 18 prioritaires (★)**
+**Total : 47 variables principales réparties sur 8 piliers — dont 18 prioritaires (★)**
 
 **Résumé des variables ★ par pilier :**
 
@@ -135,22 +135,11 @@ Utilisez-le pour :
 | **D** | D1, D3, D4 | La triade qui fait qu'une marque existe dans l'esprit du client |
 | **V** | V1, V3, V6 | L'offre, ce que le client en retire, et si c'est viable |
 | **E** | E1, E2, E5 | Les contacts, les habitudes, le funnel — la mécanique d'engagement |
+| **R** | — | Pas de variables ★ — tout le pilier est un stress-test transversal |
 | **T** | T1, T4 | Les données croisées et la taille du marché |
 | **I** | I1, I4, I9 | La feuille de route, les quick wins, et qui exécute |
 | **S** | S5, S6 | Le double format de livrable — document + dashboard |
 
 *En première passe papier, les 18 variables ★ couvrent l'essentiel de la stratégie. Les 29 autres s'ajoutent en deuxième passe ou via le SaaS.*
-
-**Résumé des variables ★ par pilier :**
-
-| Pilier | Variables ★ | Logique de priorité |
-|---|---|---|
-| **A** | A1, A3, A4 | Le noyau identitaire — sans ça, le reste est décoratif |
-| **D** | D1, D3, D4 | La triade qui fait qu'une marque existe dans l'esprit du client |
-| **V** | V1, V3, V6 | L'offre, ce que le client en retire, et si c'est viable |
-| **E** | E1, E2, E5 | Les contacts, les habitudes, le funnel — la mécanique d'engagement |
-| **T** | T1, T4 | Les données croisées et la taille du marché |
-
-*En première passe papier, les 14 variables ★ couvrent l'essentiel de la stratégie. Les 19 autres s'ajoutent en deuxième passe ou via le SaaS.*
 
 *Note : Le nombre de variables peut varier selon la complexité de la marque. Certaines marques B2B n'auront pas besoin d'une gamification élaborée (E4). Certaines startups pré-lancement n'auront pas encore d'unit economics (V6). Adaptez — mais ne sautez pas de pilier.*

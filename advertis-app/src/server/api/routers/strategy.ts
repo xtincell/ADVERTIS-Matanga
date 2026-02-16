@@ -112,7 +112,7 @@ export const strategyRouter = createTRPCRouter({
         brandName: z.string().min(1).optional(),
         sector: z.string().optional(),
         description: z.string().optional(),
-        interviewData: z.any().optional(),
+        interviewData: z.record(z.string(), z.unknown()).optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -278,7 +278,7 @@ export const strategyRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.string(),
-        data: z.record(z.any()),
+        data: z.record(z.string(), z.unknown()),
       }),
     )
     .mutation(async ({ ctx, input }) => {

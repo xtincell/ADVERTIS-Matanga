@@ -7,6 +7,7 @@ import { auth } from "~/server/auth";
 import { db } from "~/server/db";
 import { parseFile } from "~/server/services/file-parser";
 import { mapTextToVariables } from "~/server/services/variable-mapper";
+import { checkRateLimit, RATE_LIMITS } from "~/lib/rate-limit";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
@@ -26,6 +27,18 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { error: "Non authentifié" },
         { status: 401 },
+      );
+    }
+
+    // 1b. Rate limit check
+    const rateLimit = checkRateLimit(
+      `import:${session.user.id}`,
+      RATE_LIMITS.fileImport,
+    );
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: "Trop d'imports. Veuillez patienter." },
+        { status: 429 },
       );
     }
 
@@ -174,8 +187,7 @@ export async function POST(request: Request) {
       confidence: mappingResult.confidence,
       unmappedVariables: mappingResult.unmappedVariables,
     });
-  } catch (error) {
-    console.error("Import error:", error);
+  } catch {
     return NextResponse.json(
       { error: "Erreur interne lors de l'import" },
       { status: 500 },

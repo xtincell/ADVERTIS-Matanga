@@ -509,7 +509,7 @@ code {
 }
 
 .stat-change.positive { color: var(--success); }
-.stat-change.negative { color: --error); }
+.stat-change.negative { color: var(--error); }
 
 /* GRID SYSTEMS */
 .grid {

@@ -152,7 +152,7 @@ pdftk AMARA-Document-*.pdf cat output AMARA-Complete-Package.pdf
 
 ## ✅ Checklist de Livraison
 
-- [x] 8 documents ADVERT complets (S, A, D, V, E, R, T, I)
+- [x] 8 documents ADVERTIS complets (S, A, D, V, E, R, T, I)
 - [x] Interface de navigation interactive
 - [x] Outil d'export PDF intégré
 - [x] Design system avec OKLCH colors

@@ -49,7 +49,7 @@ ADVERTIS étend le framework original ADVERT avec 2 piliers supplémentaires:
 
 ---
 
-## Les 6 Agents Piliers
+## Les 8 Agents Piliers
 
 ### [A] Agent AUTHENTICITÉ
 
@@ -295,7 +295,7 @@ ADVERTIS étend le framework original ADVERT avec 2 piliers supplémentaires:
 ```yaml
 Rôle: Chef d'orchestre de l'armée
 Responsabilités:
-  - Séquencer l'exécution A→D→V→E→R→T
+  - Séquencer l'exécution A→D→V→E→R→T→I→S
   - Router les outputs entre agents
   - Gérer les dépendances
   - Déclencher agents transversaux

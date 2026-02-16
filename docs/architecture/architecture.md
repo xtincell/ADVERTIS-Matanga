@@ -108,7 +108,7 @@ ADVERT_01 comprend 112 exigences fonctionnelles organisées en 10 domaines de ca
 - ✅ Multi-tenancy: Strict data isolation required
 - ✅ Regulatory compliance: GDPR, PCI DSS, audit trails
 - ✅ Integration complexity: Third-party APIs, webhooks, export engines
-- ✅ User interaction complexity: Progressive disclosure, 6-pillar guided workflow, AI co-pilot conversationnel
+- ✅ User interaction complexity: Progressive disclosure, 8-pillar guided workflow, AI co-pilot conversationnel
 - ✅ Data complexity: Analytics aggregation, marketplace matching algorithms, user behavior tracking
 
 ### Technical Constraints & Dependencies
@@ -483,7 +483,7 @@ This starter selection should be the **first implementation story** in the devel
 1. **Multi-tenancy middleware** (Prisma extensions)
 2. **RBAC enforcement layer** (4 roles: Agency Owner, Brand Director, Creative Talent, DevTeam)
 3. **AI orchestration layer** (Vercel AI SDK integration for co-pilot)
-4. **6-pillar workflow engine** (Strategy Builder state machine)
+4. **8-pillar workflow engine** (Strategy Builder state machine)
 5. **Export engine** (PDF, PowerPoint, Markdown generation)
 6. **Financial analytics** (Dashboard with Tremor charts)
 7. **Marketplace matching algorithm** (Creative Concierge)
@@ -2292,7 +2292,7 @@ advert-01/
 │   │   │   ├── strategies/                # Strategy Management
 │   │   │   │   ├── page.tsx               # Strategy list
 │   │   │   │   ├── new/
-│   │   │   │   │   └── page.tsx           # Create strategy (6-pillar workflow)
+│   │   │   │   │   └── page.tsx           # Create strategy (8-pillar workflow)
 │   │   │   │   └── [strategyId]/
 │   │   │   │       ├── page.tsx           # Strategy detail view
 │   │   │   │       ├── edit/
@@ -2351,7 +2351,7 @@ advert-01/
 │   │   │   └── routers/                   # tRPC routers (internal API)
 │   │   │       ├── user.ts                # User management (FRs 1-10)
 │   │   │       ├── strategy.ts            # Strategy CRUD (FRs 11-31)
-│   │   │       ├── aiCopilot.ts           # AI co-pilot (6-pillar generation)
+│   │   │       ├── aiCopilot.ts           # AI co-pilot (8-pillar generation)
 │   │   │       ├── export.ts              # Export engine (FRs 41-47)
 │   │   │       ├── analytics.ts           # Financial Clarity (FRs 48-60)
 │   │   │       ├── marketplace.ts         # Marketplace (FRs 61-74)
@@ -2384,7 +2384,7 @@ advert-01/
 │   │       │   ├── StrategyList.tsx
 │   │       │   ├── StrategyList.test.tsx
 │   │       │   ├── StrategyForm.tsx
-│   │       │   ├── PillarWorkflow.tsx     # 6-pillar guided workflow
+│   │       │   ├── PillarWorkflow.tsx     # 8-pillar guided workflow
 │   │       │   └── ExportOptions.tsx
 │   │       │
 │   │       ├── analytics/
@@ -2422,7 +2422,7 @@ advert-01/
 │   │   ├── validators.ts                  # Zod schemas (shared with tRPC)
 │   │   │
 │   │   ├── ai/                            # AI utilities
-│   │   │   ├── prompts.ts                 # AI prompt templates (6-pillar)
+│   │   │   ├── prompts.ts                 # AI prompt templates (8-pillar)
 │   │   │   ├── streaming.ts               # Streaming helpers (Vercel AI SDK)
 │   │   │   └── context.ts                 # Context management for AI
 │   │   │

@@ -16,6 +16,8 @@ import {
 } from "~/server/services/audit-generation";
 import { PILLAR_TYPES, AUDIT_PILLARS } from "~/lib/constants";
 import type { RiskAuditResult } from "~/server/services/audit-generation";
+import { calculateCoherenceScore } from "~/server/services/coherence-calculator";
+import { checkRateLimit, RATE_LIMITS } from "~/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
   // ---------------------------------------------------------------------------
@@ -24,6 +26,20 @@ export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // ---------------------------------------------------------------------------
+  // 1b. Rate limit check
+  // ---------------------------------------------------------------------------
+  const rateLimit = checkRateLimit(
+    `ai-generate:${session.user.id}`,
+    RATE_LIMITS.aiGeneration,
+  );
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { error: "Trop de requêtes. Veuillez patienter avant de réessayer." },
+      { status: 429, headers: { "Retry-After": String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)) } },
+    );
   }
 
   // ---------------------------------------------------------------------------
@@ -83,6 +99,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       { error: `Pillar ${pillarType} not found in strategy` },
       { status: 404 },
+    );
+  }
+
+  // Reject if already generating (prevent race condition from double-click)
+  if (targetPillar.status === "generating") {
+    return NextResponse.json(
+      { error: `Le pilier ${pillarType} est déjà en cours de génération.` },
+      { status: 409 },
     );
   }
 
@@ -247,23 +271,29 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Check if all pillars are now complete (legacy + new flow)
+    // Check if all pillars are now complete
     const allPillars = await db.pillar.findMany({
       where: { strategyId },
-      select: { status: true },
+      select: { type: true, status: true, content: true },
     });
 
     const allComplete = allPillars.every((p) => p.status === "complete");
 
-    if (allComplete) {
-      await db.strategy.update({
-        where: { id: strategyId },
-        data: {
-          status: "complete",
-          generatedAt: new Date(),
-        },
-      });
-    }
+    // Recalculate coherence score after each pillar generation
+    const coherenceScore = calculateCoherenceScore(
+      allPillars,
+      strategy.interviewData as Record<string, unknown> | undefined,
+    );
+
+    await db.strategy.update({
+      where: { id: strategyId },
+      data: {
+        coherenceScore,
+        ...(allComplete
+          ? { status: "complete", generatedAt: new Date() }
+          : {}),
+      },
+    });
 
     return NextResponse.json({
       success: true,
@@ -274,16 +304,12 @@ export async function POST(req: NextRequest) {
         content: updatedPillar.content,
       },
       allComplete,
+      coherenceScore,
     });
   } catch (error) {
     // ---------------------------------------------------------------------------
     // 10. Handle errors
     // ---------------------------------------------------------------------------
-    console.error(
-      `[AI Generation] Error generating pillar ${pillarType}:`,
-      error,
-    );
-
     const errorMessage =
       error instanceof Error
         ? error.message

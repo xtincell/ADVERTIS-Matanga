@@ -826,7 +826,7 @@ L'objectif émotionnel primaire d'ADVERT_01 est de transformer le sentiment de "
 
 **UX Decisions:**
 - AI co-pilot comme partenaire bienveillant (pas assistant robotique)
-- Progressive disclosure de la méthodologie 6-piliers (révélation graduelle)
+- Progressive disclosure de la méthodologie 8 piliers ADVERTIS (révélation graduelle)
 - Inline education contextuelle (apprendre en faisant)
 - Contrôle total utilisateur (édition facile, undo/redo illimité)
 - Attribution claire: "Ta stratégie" (ownership, pas "Généré par IA")
@@ -1039,7 +1039,7 @@ L'objectif émotionnel primaire d'ADVERT_01 est de transformer le sentiment de "
 
 Notion excels at revealing complexity gradually through its slash command system and blocks architecture. Users start with a blank page and discover powerful features organically. Key lessons: (1) Empty states that inspire action, (2) Modular building blocks that compose infinitely, (3) AI integration that feels native not bolted-on, (4) Keyboard shortcuts discovered progressively not taught upfront.
 
-**Transferable to ADVERT_01:** Progressive revelation of 6-pillar methodology, slash commands for power users (`/insight`, `/template`, `/export`), modular strategy sections that can be reorganized.
+**Transferable to ADVERT_01:** Progressive revelation of 8-pillar methodology, slash commands for power users (`/insight`, `/template`, `/export`), modular strategy sections that can be reorganized.
 
 **Grammarly - The Invisible Partner**
 
@@ -1259,7 +1259,7 @@ Upwork demonstrates smart talent-project matching. Algorithm understands skills 
 
 **1. Chat Interface → Guided Conversation (ChatGPT)**
 - **Adaptation:** Not pure chat, but conversational tone in structured guidance
-- **Why:** Pure chat not optimal for structured 6-pillar strategy creation
+- **Why:** Pure chat not optimal for structured 8-pillar strategy creation
 - **How:** Conversational questions WITHIN structured framework
 
 **2. Slash Commands → Contextual Power Shortcuts (Notion)**
@@ -1337,7 +1337,7 @@ ADVERT_01 is a startup SaaS requiring rapid development without sacrificing qual
 
 **2. Brand Flexibility Requirements ✅**
 
-ADVERT_01 targets African agencies with unique positioning (6-pillar methodology, democratizing sophistication). Brand identity must be distinctive, not generic.
+ADVERT_01 targets African agencies with unique positioning (8-pillar methodology, democratizing sophistication). Brand identity must be distinctive, not generic.
 
 shadcn/ui + Tailwind provides:
 - Complete visual customization via design tokens (colors, typography, spacing)
@@ -1760,11 +1760,11 @@ Add Framer Motion animations for "Worth It" moments.
 
 Choose icon library and create custom icons for ADVERT methodology.
 
-**Impact:** Visual consistency and unique iconography for 6 pillars.
+**Impact:** Visual consistency and unique iconography for 8 pillars.
 
 **Implementation:**
 - Base: Lucide React (consistent, customizable)
-- Custom: 6-pillar icons (Attention, Desire, Value, Emotion, Reason, Transformation)
+- Custom: 8-pillar icons (Authenticité, Distinction, Valeur, Engagement, Risk, Track, Implementation, Strategy)
 - Style: Outline style for modern feel, optional duotone for emphasis
 
 ---
@@ -1829,13 +1829,13 @@ Radix Dialog behavior (focus trap, scroll lock, escape to close) is perfect as-i
 
 **Core Interaction: AI-Guided Strategy Transformation**
 
-The defining experience of ADVERT_01 is: **"Transform a vague campaign idea into a sophisticated, psychology-grounded ADVERT strategy in under 10 minutes through conversational AI guidance across 6 pillars."**
+The defining experience of ADVERT_01 is: **"Transform a vague campaign idea into a sophisticated, psychology-grounded ADVERTIS strategy in under 10 minutes through conversational AI guidance across 8 pillars."**
 
 This is the interaction users will describe to colleagues when recommending the platform. It's what makes ADVERT_01 fundamentally different from static templates or manual briefs.
 
 **The Magic Moment:**
 
-Amina (agency director) opens ADVERT_01 with just a brand name and basic campaign objective. Through an intelligent, conversational dialogue, the AI co-pilot guides her through the 6-pillar ADVERT methodology (Attention, Desire, Value, Emotion, Reason, Transformation). At each pillar, the AI:
+Amina (agency director) opens ADVERT_01 with just a brand name and basic campaign objective. Through an intelligent, conversational dialogue, the AI co-pilot guides her through the 8-pillar ADVERTIS methodology (Authenticité, Distinction, Valeur, Engagement, Risk, Track, Implementation, Strategy). At each pillar, the AI:
 - Asks contextually relevant questions adapted to her industry
 - Reveals psychological insights she hadn't considered
 - Suggests strategic angles based on campaign objectives
@@ -1860,7 +1860,7 @@ Amina (agency director) opens ADVERT_01 with just a brand name and basic campaig
 |---------|----------------|---------------------|
 | Google Docs | Blank page freedom | Structured guidance through methodology |
 | Template Platforms | Fill-in-the-blank forms | Conversational AI that adapts to context |
-| ChatGPT | Open-ended chat | Structured 6-pillar framework with checkpoints |
+| ChatGPT | Open-ended chat | Structured 8-pillar framework with checkpoints |
 | Notion AI | AI blocks in documents | Purpose-built for advertising strategy with psychological insights |
 
 **Why This Experience Matters:**

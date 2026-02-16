@@ -8,19 +8,18 @@ import {
   publicProcedure,
 } from "~/server/api/trpc";
 
-// Simple hash function for cockpit share passwords
-// In production, use bcrypt — keeping it simple here for now
+// Use bcrypt for secure password hashing (with salt + work factor)
 async function hashPassword(password: string): Promise<string> {
-  const { createHash } = await import("crypto");
-  return createHash("sha256").update(password).digest("hex");
+  const { hash } = await import("bcryptjs");
+  return hash(password, 12);
 }
 
 async function verifyPassword(
   password: string,
   hash: string,
 ): Promise<boolean> {
-  const hashed = await hashPassword(password);
-  return hashed === hash;
+  const { compare } = await import("bcryptjs");
+  return compare(password, hash);
 }
 
 export const cockpitRouter = createTRPCRouter({
