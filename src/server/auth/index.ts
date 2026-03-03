@@ -25,6 +25,4 @@ const { auth: uncachedAuth, handlers, signIn, signOut } = NextAuth(authConfig);
 
 const auth = cache(uncachedAuth);
 
-// uncachedAuth is needed by middleware (Edge runtime) — cache() wraps
-// with React.cache which only works in Server Component context.
-export { auth, uncachedAuth, handlers, signIn, signOut };
+export { auth, handlers, signIn, signOut };

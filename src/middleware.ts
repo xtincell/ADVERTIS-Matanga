@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { uncachedAuth } from "~/server/auth";
+import NextAuth from "next-auth";
+import { authEdgeConfig } from "~/server/auth/config.edge";
 
 // -----------------------------------------------------------------------
 // Role → route mapping
@@ -50,10 +51,11 @@ const ROLE_ROUTES: Record<string, string[]> = {
   "/os": ["ADMIN", "OPERATOR", "CLIENT_RETAINER"],
 };
 
-// Use auth() as middleware — this is the official Auth.js v5 approach.
-// Unlike getToken(), auth() correctly decrypts the JWT using the same
-// config (cookie name, encryption, secret) as the sign-in flow.
-export default uncachedAuth((req) => {
+// Edge-safe auth instance — uses lightweight config without Prisma/adapter.
+// This keeps the middleware bundle well under the 1 MB Edge limit.
+const { auth } = NextAuth(authEdgeConfig);
+
+export default auth((req) => {
   const { pathname } = req.nextUrl;
   const session = req.auth;
 
