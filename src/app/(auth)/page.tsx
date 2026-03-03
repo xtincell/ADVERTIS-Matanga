@@ -8,6 +8,10 @@ import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
 import { getHomeByRole } from "~/lib/role-routing";
 
+// Prevent static prerendering so Next.js doesn't generate an orphaned
+// client-reference-manifest for this redirect-only page.
+export const dynamic = "force-dynamic";
+
 export default async function AuthRootPage() {
   const session = await auth();
 

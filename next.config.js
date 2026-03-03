@@ -14,6 +14,13 @@ const config = {
       },
     ];
   },
+  webpack: (config, { isServer }) => {
+    // unzipper@0.12 has an optional S3 import that isn't needed
+    if (isServer) {
+      config.resolve.alias["@aws-sdk/client-s3"] = false;
+    }
+    return config;
+  },
 };
 
 export default config;
