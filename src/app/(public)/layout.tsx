@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   AdvertisMonogram,
   AdvertisWordmark,
@@ -55,10 +56,18 @@ export default function PublicLayout({
 
         <div className="w-full max-w-md">{children}</div>
 
-        {/* Footer note */}
-        <p className="mt-12 text-xs text-muted-foreground/60">
-          &copy; {new Date().getFullYear()} ADVERTIS. Tous droits réservés.
-        </p>
+        {/* Footer */}
+        <div className="mt-12 flex flex-col items-center gap-2">
+          <Link
+            href="/"
+            className="text-xs text-muted-foreground/60 underline-offset-4 hover:text-foreground hover:underline"
+          >
+            Retour au site
+          </Link>
+          <p className="text-xs text-muted-foreground/60">
+            &copy; {new Date().getFullYear()} ADVERTIS. Tous droits réservés.
+          </p>
+        </div>
       </div>
     </div>
   );
