@@ -125,7 +125,7 @@ export const authConfig = {
         ...session.user,
         id: token.id as string,
         company: token.company as string | null,
-        role: (token.role as string) ?? "user",
+        role: (token.role as string) ?? "OPERATOR",
       },
     }),
   },

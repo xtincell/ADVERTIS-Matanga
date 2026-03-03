@@ -39,8 +39,9 @@ export default function LoginPage() {
       if (result?.error) {
         setError("Email ou mot de passe incorrect.");
       } else {
-        // Redirect to root — server will route to role-specific home
-        router.push("/");
+        // Full reload so the server sees the new auth cookie and
+        // performs the role-based redirect properly.
+        window.location.href = "/";
       }
     } catch {
       setError("Une erreur est survenue. Veuillez reessayer.");
