@@ -7,13 +7,23 @@
 //   (client)/layout.tsx    → CLIENT_RETAINER, CLIENT_STATIC
 // ==========================================================================
 
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
+import { Loader2 } from "lucide-react";
 import AuthSessionProvider from "~/components/providers/session-provider";
 import { ViewAsProvider } from "~/components/providers/view-as-provider";
 import { RoleProvider } from "~/components/providers/role-provider";
 import { TooltipProvider } from "~/components/ui/tooltip";
 import { OfflineBanner } from "~/components/ui/offline-banner";
+
+function AuthFallback() {
+  return (
+    <div className="flex h-[60vh] items-center justify-center">
+      <Loader2 className="size-8 animate-spin text-muted-foreground" />
+    </div>
+  );
+}
 
 export default async function AuthLayout({
   children,
@@ -32,7 +42,9 @@ export default async function AuthLayout({
         <OfflineBanner />
         <ViewAsProvider>
           <RoleProvider>
-            {children}
+            <Suspense fallback={<AuthFallback />}>
+              {children}
+            </Suspense>
           </RoleProvider>
         </ViewAsProvider>
       </TooltipProvider>
