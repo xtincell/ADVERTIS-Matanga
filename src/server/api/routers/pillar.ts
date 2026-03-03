@@ -1,0 +1,363 @@
+// =============================================================================
+// ROUTER T.2 — Pillar Router
+// =============================================================================
+// Pillar content management + version history for ADVERTIS strategy pillars.
+//
+// Procedures:
+//   getByStrategy   — Get all pillars for a strategy, ordered by `order`
+//   getById         — Get a single pillar by ID (with strategy)
+//   update          — Update pillar fields (content, summary, status) + version snapshot
+//   getStale        — Get all stale pillars for a strategy
+//   updateStatus    — Update pillar status with optional error message
+//   getVersions     — Get version history for a pillar (newest first)
+//   restoreVersion  — Restore pillar content from a previous version
+//
+// Dependencies:
+//   ~/server/api/trpc                          — createTRPCRouter, protectedProcedure
+//   ~/lib/types/pillar-parsers                 — validatePillarContent
+//   ~/server/services/widgets/compute-engine   — invalidateWidgetsForPillar, computeAllWidgets
+//   ~/server/services/score-engine             — recalculateAllScores
+//   ~/server/services/stale-detector           — clearPillarStaleness
+// =============================================================================
+
+import { z } from "zod";
+import { TRPCError } from "@trpc/server";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import { validatePillarContent } from "~/lib/types/pillar-parsers";
+import { invalidateWidgetsForPillar, computeAllWidgets } from "~/server/services/widgets/compute-engine";
+import { recalculateAllScores } from "~/server/services/score-engine";
+import { clearPillarStaleness } from "~/server/services/stale-detector";
+import { extractVariablesFromPillar } from "~/server/services/variable-extractor";
+
+export const pillarRouter = createTRPCRouter({
+  /**
+   * Get all pillars for a strategy, ordered by `order`.
+   * Verifies the strategy belongs to the current user.
+   */
+  getByStrategy: protectedProcedure
+    .input(z.object({ strategyId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const strategy = await ctx.db.strategy.findUnique({
+        where: { id: input.strategyId },
+        select: { userId: true },
+      });
+
+      if (!strategy || strategy.userId !== ctx.session.user.id) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Stratégie non trouvée",
+        });
+      }
+
+      const pillars = await ctx.db.pillar.findMany({
+        where: { strategyId: input.strategyId },
+        orderBy: { order: "asc" },
+      });
+
+      return pillars;
+    }),
+
+  /**
+   * Get a single pillar by ID with its strategy.
+   * Verifies ownership through the strategy.
+   */
+  getById: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const pillar = await ctx.db.pillar.findUnique({
+        where: { id: input.id },
+        include: {
+          strategy: true,
+        },
+      });
+
+      if (!pillar || pillar.strategy.userId !== ctx.session.user.id) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Pilier non trouvé",
+        });
+      }
+
+      return pillar;
+    }),
+
+  /**
+   * Update pillar fields (content, summary, status).
+   * Verifies ownership through the strategy.
+   */
+  update: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        content: z.record(z.string(), z.unknown()).optional(),
+        summary: z.string().optional(),
+        status: z
+          .enum(["pending", "generating", "complete", "error"])
+          .optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const existing = await ctx.db.pillar.findUnique({
+        where: { id: input.id },
+        include: {
+          strategy: { select: { userId: true } },
+        },
+      });
+
+      if (!existing || existing.strategy.userId !== ctx.session.user.id) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Pilier non trouvé",
+        });
+      }
+
+      // Soft validation: log warnings but still save (avoid data loss during edits)
+      if (input.content !== undefined) {
+        const validation = validatePillarContent(existing.type, input.content);
+        if (!validation.success) {
+          console.warn(
+            `[Pillar Save] Validation warnings for pillar ${existing.type} (${existing.id}):`,
+            validation.errors,
+          );
+        }
+      }
+
+      // Snapshot current content before overwriting (version history)
+      if (input.content !== undefined && existing.content != null) {
+        await ctx.db.pillarVersion.create({
+          data: {
+            pillarId: existing.id,
+            version: existing.version,
+            content: existing.content,
+            summary: existing.summary,
+            source: "manual_edit",
+            createdBy: ctx.session.user.id,
+          },
+        });
+      }
+
+      const { id, content: inputContent, ...restData } = input;
+
+      const pillar = await ctx.db.pillar.update({
+        where: { id },
+        data: {
+          ...restData,
+          // Cast content to satisfy Prisma's InputJsonValue type
+          ...(inputContent !== undefined ? { content: inputContent as never } : {}),
+          generatedAt:
+            restData.status === "complete" ? new Date() : undefined,
+          // Increment version + reset staleness when content changes
+          ...(inputContent !== undefined
+            ? { version: { increment: 1 }, staleReason: null, staleSince: null }
+            : {}),
+        },
+      });
+
+      // Invalidate cockpit widgets that depend on this pillar type
+      if (input.content !== undefined) {
+        void invalidateWidgetsForPillar(existing.strategyId, existing.type);
+        // Recalculate all scores reactively on every content change
+        void recalculateAllScores(existing.strategyId, "pillar_update");
+        // Auto-compute widgets eagerly
+        void computeAllWidgets(existing.strategyId);
+        // Clear staleness on content update
+        void clearPillarStaleness(existing.id);
+        // Sync to BrandVariable registry (fire-and-forget)
+        void extractVariablesFromPillar(
+          existing.strategyId, existing.type, input.content,
+          ctx.session.user.id, "manual_edit",
+        );
+      }
+
+      return pillar;
+    }),
+
+  /**
+   * Get all stale pillars for a strategy.
+   * Returns pillars where staleReason is not null.
+   */
+  getStale: protectedProcedure
+    .input(z.object({ strategyId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const strategy = await ctx.db.strategy.findUnique({
+        where: { id: input.strategyId },
+        select: { userId: true },
+      });
+
+      if (!strategy || strategy.userId !== ctx.session.user.id) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Stratégie non trouvée",
+        });
+      }
+
+      const stalePillars = await ctx.db.pillar.findMany({
+        where: {
+          strategyId: input.strategyId,
+          staleReason: { not: null },
+        },
+        orderBy: { order: "asc" },
+      });
+
+      return stalePillars;
+    }),
+
+  /**
+   * Update pillar status with optional error message.
+   * Verifies ownership through the strategy.
+   */
+  updateStatus: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        status: z.enum(["pending", "generating", "complete", "error"]),
+        errorMessage: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const existing = await ctx.db.pillar.findUnique({
+        where: { id: input.id },
+        include: {
+          strategy: { select: { userId: true } },
+        },
+      });
+
+      if (!existing || existing.strategy.userId !== ctx.session.user.id) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Pilier non trouvé",
+        });
+      }
+
+      const pillar = await ctx.db.pillar.update({
+        where: { id: input.id },
+        data: {
+          status: input.status,
+          errorMessage:
+            input.status === "error" ? input.errorMessage : null,
+          generatedAt:
+            input.status === "complete" ? new Date() : undefined,
+        },
+      });
+
+      return pillar;
+    }),
+
+  /**
+   * Get version history for a pillar.
+   * Returns versions ordered by version DESC (newest first).
+   */
+  getVersions: protectedProcedure
+    .input(
+      z.object({
+        pillarId: z.string(),
+        limit: z.number().int().min(1).max(100).default(50),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const pillar = await ctx.db.pillar.findUnique({
+        where: { id: input.pillarId },
+        include: {
+          strategy: { select: { userId: true } },
+        },
+      });
+
+      if (!pillar || pillar.strategy.userId !== ctx.session.user.id) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Pilier non trouvé",
+        });
+      }
+
+      const versions = await ctx.db.pillarVersion.findMany({
+        where: { pillarId: input.pillarId },
+        orderBy: { version: "desc" },
+        take: input.limit,
+        select: {
+          id: true,
+          version: true,
+          source: true,
+          changeNote: true,
+          summary: true,
+          createdBy: true,
+          createdAt: true,
+        },
+      });
+
+      return {
+        currentVersion: pillar.version,
+        versions,
+      };
+    }),
+
+  /**
+   * Restore pillar content from a previous version.
+   * Snapshots current content first, then replaces with the selected version.
+   */
+  restoreVersion: protectedProcedure
+    .input(
+      z.object({
+        pillarId: z.string(),
+        versionId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const pillar = await ctx.db.pillar.findUnique({
+        where: { id: input.pillarId },
+        include: {
+          strategy: { select: { userId: true } },
+        },
+      });
+
+      if (!pillar || pillar.strategy.userId !== ctx.session.user.id) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Pilier non trouvé",
+        });
+      }
+
+      const targetVersion = await ctx.db.pillarVersion.findUnique({
+        where: { id: input.versionId },
+      });
+
+      if (!targetVersion || targetVersion.pillarId !== input.pillarId) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Version non trouvée",
+        });
+      }
+
+      // Snapshot current content before restoring
+      if (pillar.content != null) {
+        await ctx.db.pillarVersion.create({
+          data: {
+            pillarId: pillar.id,
+            version: pillar.version,
+            content: pillar.content,
+            summary: pillar.summary,
+            source: "restore",
+            changeNote: `Avant restauration vers la version ${targetVersion.version}`,
+            createdBy: ctx.session.user.id,
+          },
+        });
+      }
+
+      // Restore content from target version
+      const updated = await ctx.db.pillar.update({
+        where: { id: input.pillarId },
+        data: {
+          content: targetVersion.content ?? undefined,
+          summary: targetVersion.summary,
+          version: { increment: 1 },
+          staleReason: null,
+          staleSince: null,
+        },
+      });
+
+      // Invalidate widgets + recalculate scores
+      void invalidateWidgetsForPillar(pillar.strategyId, pillar.type);
+      void recalculateAllScores(pillar.strategyId, "pillar_update");
+
+      return updated;
+    }),
+});

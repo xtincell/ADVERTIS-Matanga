@@ -1,0 +1,514 @@
+// =============================================================================
+// SERVICE S.GLORY.4 — Glory Generation Engine
+// =============================================================================
+// Main AI generation service for all GLORY tools.
+// Orchestrates: registry lookup → context build → prompt assembly → AI call → parse → persist.
+// Called by: tRPC glory.generate mutation
+// Dependencies:
+//   ~/server/services/anthropic-client (resilientGenerateText, anthropic, DEFAULT_MODEL)
+//   ~/server/services/prompt-helpers (injectSpecialization)
+//   ~/server/services/glory/registry (getToolBySlug)
+//   ~/server/services/glory/prompts (GLORY_SYSTEM_PROMPTS)
+//   ~/server/services/glory/context-builder (buildStrategyContext)
+//   ~/server/services/glory/visual-adapters/* (visual search for BRAND moodboard)
+//   ~/server/db
+// =============================================================================
+
+import {
+  resilientGenerateText,
+  anthropic,
+  DEFAULT_MODEL,
+} from "~/server/services/anthropic-client";
+import { trackAICall } from "~/server/services/ai-cost-tracker";
+import { injectSpecialization } from "~/server/services/prompt-helpers";
+import { getToolBySlug } from "~/server/services/glory/registry";
+import { GLORY_SYSTEM_PROMPTS } from "~/server/services/glory/prompts";
+import { buildStrategyContext } from "~/server/services/glory/context-builder";
+import { db } from "~/server/db";
+import type {
+  VisualReference,
+  VisualSearchParams,
+} from "~/server/services/glory/visual-adapters/base-visual-adapter";
+
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
+
+interface GenerateOpts {
+  toolSlug: string;
+  strategyId: string;
+  userInputs: Record<string, unknown>;
+  userId: string;
+  save?: boolean;
+  title?: string;
+}
+
+interface GenerateResult {
+  outputData: unknown;
+  outputText: string;
+  savedId?: string;
+}
+
+// ---------------------------------------------------------------------------
+// 4.1  JSON extraction helpers
+// ---------------------------------------------------------------------------
+
+/**
+ * Robustly extracts JSON from AI response text.
+ * Handles: raw JSON, markdown-fenced JSON (```json ... ```), and partial wrapping.
+ */
+function extractJsonFromText(text: string): unknown | null {
+  // 1. Try direct parse first (cheapest path)
+  try {
+    return JSON.parse(text);
+  } catch {
+    // not valid JSON as-is, continue
+  }
+
+  // 2. Try extracting from markdown code fences (```json ... ``` or ``` ... ```)
+  const fencePattern = /```(?:json)?\s*\n?([\s\S]*?)\n?\s*```/;
+  const fenceMatch = fencePattern.exec(text);
+  if (fenceMatch?.[1]) {
+    try {
+      return JSON.parse(fenceMatch[1].trim());
+    } catch {
+      // fence content isn't valid JSON either
+    }
+  }
+
+  // 3. Try to find the outermost { ... } block
+  const firstBrace = text.indexOf("{");
+  const lastBrace = text.lastIndexOf("}");
+  if (firstBrace !== -1 && lastBrace > firstBrace) {
+    try {
+      return JSON.parse(text.slice(firstBrace, lastBrace + 1));
+    } catch {
+      // still not parseable
+    }
+  }
+
+  // 4. Try to find the outermost [ ... ] block (arrays)
+  const firstBracket = text.indexOf("[");
+  const lastBracket = text.lastIndexOf("]");
+  if (firstBracket !== -1 && lastBracket > firstBracket) {
+    try {
+      return JSON.parse(text.slice(firstBracket, lastBracket + 1));
+    } catch {
+      // not parseable
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Build a plain-text summary from parsed output data.
+ * Walks top-level keys and produces a readable text version.
+ * Handles multi-variant output: { variants: [...] }
+ */
+function buildOutputText(data: unknown): string {
+  if (typeof data === "string") return data;
+  if (data === null || data === undefined) return "";
+
+  if (typeof data !== "object") return String(data);
+
+  // Handle multi-variant output
+  if (
+    !Array.isArray(data) &&
+    "variants" in (data as Record<string, unknown>) &&
+    Array.isArray((data as Record<string, unknown>).variants)
+  ) {
+    const variants = (data as Record<string, unknown>).variants as Record<string, unknown>[];
+    const sections: string[] = [];
+    for (const variant of variants) {
+      const label = (variant.label as string) ?? "Variante";
+      sections.push(`### Variante : ${label}\n\n${buildSingleOutputText(variant)}`);
+    }
+    return sections.join("\n\n---\n\n");
+  }
+
+  return buildSingleOutputText(data);
+}
+
+/**
+ * Build text for a single output object (no variant wrapping).
+ */
+function buildSingleOutputText(data: unknown): string {
+  if (typeof data === "string") return data;
+  if (data === null || data === undefined) return "";
+  if (typeof data !== "object") return String(data);
+
+  const lines: string[] = [];
+
+  if (Array.isArray(data)) {
+    for (const item of data) {
+      lines.push(typeof item === "string" ? `- ${item}` : `- ${JSON.stringify(item)}`);
+    }
+    return lines.join("\n");
+  }
+
+  // Object — enumerate top-level keys (skip "label" which is the variant label)
+  for (const [key, value] of Object.entries(data as Record<string, unknown>)) {
+    if (key === "label") continue;
+    if (typeof value === "string") {
+      lines.push(`## ${key}\n${value}`);
+    } else if (Array.isArray(value)) {
+      lines.push(`## ${key}`);
+      for (const item of value) {
+        lines.push(typeof item === "string" ? `- ${item}` : `- ${JSON.stringify(item)}`);
+      }
+    } else if (value !== null && value !== undefined) {
+      lines.push(`## ${key}\n${JSON.stringify(value, null, 2)}`);
+    }
+  }
+
+  return lines.join("\n\n");
+}
+
+// ---------------------------------------------------------------------------
+// 4.2  Format user inputs for the prompt
+// ---------------------------------------------------------------------------
+
+function formatUserInputs(inputs: Record<string, unknown>): string {
+  const lines: string[] = [];
+  for (const [key, value] of Object.entries(inputs)) {
+    if (value === undefined || value === null || value === "") continue;
+    const displayKey = key.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase());
+    if (typeof value === "object") {
+      lines.push(`- **${displayKey}** : ${JSON.stringify(value)}`);
+    } else {
+      lines.push(`- **${displayKey}** : ${String(value)}`);
+    }
+  }
+  return lines.join("\n");
+}
+
+// ---------------------------------------------------------------------------
+// 4.3  Visual adapter helpers (BRAND pipeline)
+// ---------------------------------------------------------------------------
+
+/** Extract searchable keywords from user inputs (visualDirection, mood, etc.) */
+function extractKeywordsFromInputs(inputs: Record<string, unknown>): string[] {
+  const keywords: string[] = [];
+
+  // Extract from visualDirection (textarea)
+  if (typeof inputs.visualDirection === "string" && inputs.visualDirection) {
+    keywords.push(
+      ...inputs.visualDirection
+        .split(/[\s,;]+/)
+        .filter((w) => w.length > 3)
+        .slice(0, 5),
+    );
+  }
+
+  // Extract from mood (multiselect or string)
+  if (Array.isArray(inputs.mood)) {
+    keywords.push(...(inputs.mood as string[]));
+  } else if (typeof inputs.mood === "string") {
+    keywords.push(inputs.mood);
+  }
+
+  // Extract from any "keywords" field
+  if (typeof inputs.keywords === "string") {
+    keywords.push(...inputs.keywords.split(/[\s,;]+/).filter(Boolean));
+  }
+
+  return keywords.length > 0 ? keywords : ["brand", "identity", "design"];
+}
+
+/** Extract hex color codes from user inputs (colorDirection, colorPalette) */
+function extractColorsFromInputs(inputs: Record<string, unknown>): string[] {
+  if (typeof inputs.colorDirection === "string" && inputs.colorDirection) {
+    const hexMatches = inputs.colorDirection.match(/#[0-9a-fA-F]{3,8}/g);
+    if (hexMatches) return hexMatches;
+  }
+  if (Array.isArray(inputs.colorPalette)) {
+    return (inputs.colorPalette as string[]).filter(
+      (c) => typeof c === "string" && c.startsWith("#"),
+    );
+  }
+  return [];
+}
+
+// ---------------------------------------------------------------------------
+// 4.4  Main export — generateGloryOutput
+// ---------------------------------------------------------------------------
+
+export async function generateGloryOutput(opts: GenerateOpts): Promise<GenerateResult> {
+  // 1. Registry lookup
+  const tool = getToolBySlug(opts.toolSlug);
+  if (!tool) {
+    throw new Error(
+      `Outil GLORY introuvable : "${opts.toolSlug}". Vérifiez le slug dans le registre.`,
+    );
+  }
+
+  // 2. Build strategy context (pillars + operational data)
+  const { context, strategy } = await buildStrategyContext(
+    opts.strategyId,
+    tool.requiredPillars,
+    tool.requiredContext ?? [],
+  );
+
+  // ── 2.5 Hook: Visual Adapters for BRAND tools with "visual-references" ──
+  let visualContext = "";
+  let visualData: VisualReference[] = [];
+
+  if (tool.requiredContext?.includes("visual-references")) {
+    try {
+      const {
+        aggregateVisualSearch,
+        loadConfiguredVisualAdapters,
+        formatVisualReferencesForPrompt,
+      } = await import(
+        "~/server/services/glory/visual-adapters/base-visual-adapter"
+      );
+
+      const adapters = await loadConfiguredVisualAdapters();
+      const searchParams: VisualSearchParams = {
+        brandName: strategy.brandName,
+        keywords: extractKeywordsFromInputs(opts.userInputs),
+        colors: extractColorsFromInputs(opts.userInputs),
+        style:
+          typeof opts.userInputs.mood === "string"
+            ? opts.userInputs.mood
+            : undefined,
+        regions: Array.isArray(opts.userInputs.inspirationRegions)
+          ? (opts.userInputs.inspirationRegions as string[])
+          : typeof opts.userInputs.inspirationRegions === "string"
+            ? [opts.userInputs.inspirationRegions as string]
+            : undefined,
+        perSource:
+          typeof opts.userInputs.referencesPerSource === "number"
+            ? (opts.userInputs.referencesPerSource as number)
+            : 6,
+      };
+
+      const result = await aggregateVisualSearch(searchParams, adapters);
+      visualData = result.references;
+      visualContext = formatVisualReferencesForPrompt(result.references);
+
+      if (result.errors.length > 0) {
+        console.warn("[GLORY Visual] Adapter errors:", result.errors);
+      }
+    } catch (err) {
+      console.error("[GLORY Visual] Failed to load visual adapters:", err);
+    }
+  }
+
+  // ── 2.7 Dependency check (soft warning for BRAND pipeline) ──
+  let dependencyWarning = "";
+
+  if (tool.dependsOn && tool.dependsOn.length > 0) {
+    const existingOutputs = await db.gloryOutput.findMany({
+      where: { strategyId: opts.strategyId },
+      select: { toolSlug: true },
+    });
+    const completedSlugs = new Set(existingOutputs.map((o) => o.toolSlug));
+    const missingSlugs = tool.dependsOn.filter(
+      (slug) => !completedSlugs.has(slug),
+    );
+
+    if (missingSlugs.length > 0) {
+      dependencyWarning = [
+        "",
+        "⚠️ AVERTISSEMENT : Certains outils prérequis n'ont pas encore été exécutés pour cette stratégie :",
+        ...missingSlugs.map((s) => `  - ${s}`),
+        "Les résultats peuvent être moins précis sans ces données contextuelles.",
+        "",
+      ].join("\n");
+    }
+  }
+
+  // 3. Get system prompt
+  const systemPrompt = GLORY_SYSTEM_PROMPTS[opts.toolSlug];
+  if (!systemPrompt) {
+    throw new Error(
+      `Prompt système manquant pour l'outil GLORY "${opts.toolSlug}". Ajoutez-le dans glory/prompts.ts.`,
+    );
+  }
+
+  // 4. Inject vertical/maturity specialization
+  const enrichedSystemPrompt = injectSpecialization(systemPrompt, {
+    vertical: strategy.vertical,
+    maturityProfile: strategy.maturityProfile,
+  });
+
+  // 5. Build user prompt
+  const formattedInputs = formatUserInputs(opts.userInputs);
+  const variantCount = tool.variations ?? 1;
+  const variantInstruction =
+    variantCount > 1
+      ? [
+          "",
+          `IMPORTANT : Génère exactement ${variantCount} VARIANTES distinctes.`,
+          `Retourne un JSON avec cette structure : { "variants": [ { "label": "Nom variante", ...contenu... }, ... ] }`,
+          `Chaque variante doit avoir un "label" descriptif et proposer une approche différente (ex: conservatrice vs. équilibrée vs. offensive).`,
+        ].join("\n")
+      : "";
+
+  const userPrompt = [
+    "# DONNÉES STRATÉGIQUES DE LA MARQUE",
+    context,
+    visualContext, // Visual references from API adapters (empty if not applicable)
+    dependencyWarning, // Pipeline dependency warning (empty if all deps met)
+    "",
+    "# INPUTS DE L'UTILISATEUR",
+    formattedInputs,
+    "",
+    "Génère maintenant le résultat demandé en respectant le format JSON spécifié.",
+    variantInstruction,
+  ].join("\n");
+
+  // 6. Call AI (BRAND tools get a higher token budget for complex outputs)
+  const maxTokens = tool.layer === "BRAND" ? 12000 : 8000;
+  const gloryStart = Date.now();
+  const aiResult = await resilientGenerateText({
+    label: `glory-${opts.toolSlug}`,
+    model: anthropic(DEFAULT_MODEL),
+    system: enrichedSystemPrompt,
+    prompt: userPrompt,
+    maxOutputTokens: maxTokens,
+    temperature: 0.7,
+  });
+
+  // Track AI cost
+  await trackAICall({
+    model: DEFAULT_MODEL,
+    tokensIn: aiResult.usage?.inputTokens ?? 0,
+    tokensOut: aiResult.usage?.outputTokens ?? 0,
+    generationType: `glory-${opts.toolSlug}`,
+    strategyId: opts.strategyId,
+    durationMs: Date.now() - gloryStart,
+    metadata: { toolSlug: opts.toolSlug, layer: tool.layer },
+  }, opts.userId).catch(console.error);
+
+  const rawText: string = typeof aiResult.text === "string" ? aiResult.text : String(aiResult.text);
+
+  // 7. Parse response
+  let outputData: unknown;
+  let outputText: string;
+
+  if (tool.outputFormat === "markdown") {
+    // For markdown tools, keep the raw text as-is
+    outputData = { markdown: rawText };
+    outputText = rawText;
+  } else {
+    // Try to extract structured JSON
+    const parsed = extractJsonFromText(rawText);
+    if (parsed !== null) {
+      outputData = parsed;
+      outputText = buildOutputText(parsed);
+    } else {
+      // Fallback: treat the whole response as text
+      outputData = { rawResponse: rawText };
+      outputText = rawText;
+    }
+  }
+
+  // ── 7.5 Nano Banana hook for visual moodboard tool ──
+  if (
+    opts.toolSlug === "visual-moodboard-generator" &&
+    outputData &&
+    typeof outputData === "object"
+  ) {
+    try {
+      const {
+        generateNanoBananaV1Prompts,
+        generateNanoBananaV2Prompts,
+        formatNanoBananaPromptsForOutput,
+      } = await import(
+        "~/server/services/glory/visual-adapters/nano-banana"
+      );
+
+      const moodValue = opts.userInputs.mood;
+      const moodStr = Array.isArray(moodValue)
+        ? (moodValue as string[]).join(", ")
+        : typeof moodValue === "string"
+          ? moodValue
+          : "";
+
+      const nanaBananaInput = {
+        brandName: strategy.brandName,
+        visualDirection:
+          typeof opts.userInputs.visualDirection === "string"
+            ? opts.userInputs.visualDirection
+            : "",
+        colorPalette: extractColorsFromInputs(opts.userInputs),
+        mood: moodStr,
+        style: moodStr,
+        applications: Array.isArray(opts.userInputs.applications)
+          ? (opts.userInputs.applications as string[])
+          : [],
+      };
+
+      const useV2 = opts.userInputs.nanoBananaVersion === "v2";
+      const nanaBananaPrompts = useV2
+        ? generateNanoBananaV2Prompts(nanaBananaInput)
+        : generateNanoBananaV1Prompts(nanaBananaInput);
+
+      const nanaBananaOutput =
+        formatNanoBananaPromptsForOutput(nanaBananaPrompts);
+
+      // Merge Nano Banana prompts + visual references into output
+      outputData = {
+        ...(outputData as Record<string, unknown>),
+        ...nanaBananaOutput,
+        visualReferences: {
+          count: visualData.length,
+          sources: [...new Set(visualData.map((r) => r.source))],
+          references: visualData.slice(0, 20).map((r) => ({
+            title: r.title,
+            source: r.source,
+            imageUrl: r.imageUrl,
+            thumbnailUrl: r.thumbnailUrl,
+            dominantColor: r.dominantColor,
+            attribution: r.attribution,
+            sourceUrl: r.sourceUrl,
+            region: r.region,
+          })),
+        },
+      };
+
+      // Rebuild text with merged data
+      outputText = buildOutputText(outputData);
+    } catch (err) {
+      console.error("[GLORY] Nano Banana hook error:", err);
+    }
+  }
+
+  // 8. Persist if requested and tool allows it
+  let savedId: string | undefined;
+
+  if (opts.save && tool.persistable) {
+    const autoTitle =
+      opts.title ?? `${tool.shortName} — ${strategy.brandName}`;
+
+    // Compute next refNumber for this strategy (GLORY-CR-001 format)
+    const existingCount = await db.gloryOutput.count({
+      where: { strategyId: opts.strategyId },
+    });
+    const refNumber = `GLORY-${tool.layer}-${String(existingCount + 1).padStart(3, "0")}`;
+
+    const record = await db.gloryOutput.create({
+      data: {
+        strategyId: opts.strategyId,
+        toolSlug: opts.toolSlug,
+        layer: tool.layer,
+        title: autoTitle,
+        inputData: opts.userInputs as object,
+        outputData: outputData as object,
+        outputText,
+        status: "complete",
+        version: 1,
+        refNumber,
+        createdBy: opts.userId,
+      },
+    });
+
+    savedId = record.id;
+  }
+
+  // 9. Return
+  return { outputData, outputText, savedId };
+}
