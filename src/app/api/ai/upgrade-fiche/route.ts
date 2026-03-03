@@ -14,6 +14,7 @@ import { auth } from "~/server/auth";
 import { upgradeFiche } from "~/server/services/fiche-upgrade";
 
 // Vercel hobby plan caps serverless functions at 300s
+// Allow up to 5 minutes for full 8-pillar regeneration + AI fill
 export const maxDuration = 300;
 
 export async function POST(req: NextRequest) {
