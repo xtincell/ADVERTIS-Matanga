@@ -39,10 +39,11 @@ export default function RegisterPage() {
 
       if (result?.error) {
         // Registration succeeded but auto-login failed, redirect to login
-        router.push("/login");
+        window.location.href = "/login";
       } else {
-        // Redirect to root — server will route to role-specific home
-        router.push("/");
+        // Full reload so the server sees the new auth cookie and
+        // performs the role-based redirect properly.
+        window.location.href = "/";
       }
     },
     onError: (err) => {
