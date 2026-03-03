@@ -6,15 +6,15 @@
 // missing variables and regenerating all 8 pillars (A-D-V-E-R-T-I-S).
 // Auth:         Session required (ownership verified inside upgradeFiche service)
 // Dependencies: fiche-upgrade service
-// maxDuration:  600s (10 minutes — full 8-pillar regeneration + AI fill)
+// maxDuration:  300s (5 minutes — Vercel hobby plan ceiling)
 // =============================================================================
 
 import { type NextRequest, NextResponse } from "next/server";
 import { auth } from "~/server/auth";
 import { upgradeFiche } from "~/server/services/fiche-upgrade";
 
-// Allow up to 10 minutes for full 8-pillar regeneration + AI fill
-export const maxDuration = 600;
+// Vercel hobby plan caps serverless functions at 300s
+export const maxDuration = 300;
 
 export async function POST(req: NextRequest) {
   // ---------------------------------------------------------------------------
