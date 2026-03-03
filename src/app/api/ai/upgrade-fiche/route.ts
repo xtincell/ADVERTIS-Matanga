@@ -13,8 +13,8 @@ import { type NextRequest, NextResponse } from "next/server";
 import { auth } from "~/server/auth";
 import { upgradeFiche } from "~/server/services/fiche-upgrade";
 
-// Allow up to 10 minutes for full 8-pillar regeneration + AI fill
-export const maxDuration = 600;
+// Allow up to 5 minutes for full 8-pillar regeneration + AI fill
+export const maxDuration = 300;
 
 export async function POST(req: NextRequest) {
   // ---------------------------------------------------------------------------
