@@ -23,7 +23,10 @@ export function getHomeByRole(role: string): string {
     case "CLIENT_STATIC":
       return "/cockpit";
     default:
-      return "/login";
+      // Fallback to dashboard (OPERATOR is the default role).
+      // Returning /login here would create a redirect loop for
+      // authenticated users whose role is temporarily missing.
+      return "/dashboard";
   }
 }
 

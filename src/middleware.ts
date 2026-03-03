@@ -18,7 +18,10 @@ function getHomeByRole(role: string): string {
     case "CLIENT_STATIC":
       return "/cockpit";
     default:
-      return "/login";
+      // Authenticated users with unknown/missing role go to root,
+      // where auth() will refresh the role from DB and redirect.
+      // Sending them to /login would create a redirect loop.
+      return "/";
   }
 }
 
