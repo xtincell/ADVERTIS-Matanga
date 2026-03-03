@@ -106,7 +106,15 @@ export const authConfig = {
       if (user) {
         token.id = user.id;
         token.company = user.company;
+        // PrismaAdapter may strip custom fields — fall back to DB lookup
         token.role = user.role;
+        if (!token.role && user.id) {
+          const dbUser = await db.user.findUnique({
+            where: { id: user.id },
+            select: { role: true },
+          });
+          token.role = dbUser?.role ?? "OPERATOR";
+        }
       } else if (token.id) {
         // Refresh role from DB so admin changes propagate without re-login
         const dbUser = await db.user.findUnique({
